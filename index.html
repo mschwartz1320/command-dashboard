@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Command</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
       --bg: #faf9f5;
       --bg2: #f2f1ec;
@@ -17,8 +18,9 @@
       --text2: #5c5c5a;
       --muted: #8c8c8a;
       --accent: #D97757;
+      --accent-hover: #c4684a;
       --border: #e5e4df;
-      --shadow: rgba(20,20,19,0.06);
+      --shadow: rgba(20,20,19,0.05);
       --job: #3b82f6;
       --job-bg: #eff6ff;
       --finance: #16a34a;
@@ -27,70 +29,109 @@
       --personal-bg: #f5f3ff;
       --roots: #D97757;
       --roots-bg: #fff7ed;
+      --inprogress-bar: #D97757;
+      --waiting-bar: #94a3b8;
     }
+
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 40px;
+      overflow-x: hidden;
     }
+
+    /* ── HEADER ── */
     header {
       position: sticky;
       top: 0;
+      z-index: 100;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
-      padding: 14px 16px 10px;
-      z-index: 100;
+      padding: 12px 16px 10px;
     }
+
     .header-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
     }
-    h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; }
-    .count-badge {
-      background: var(--accent);
-      color: white;
+
+    h1 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .badge {
       font-size: 11px;
       font-weight: 600;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 20px;
+      background: var(--accent);
+      color: white;
     }
+
+    .badge-muted {
+      background: var(--bg2);
+      color: var(--muted);
+    }
+
+    /* ── FILTERS ── */
     .filters {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding-bottom: 2px;
       scrollbar-width: none;
+      padding-bottom: 2px;
     }
     .filters::-webkit-scrollbar { display: none; }
+
     .filter-btn {
       background: var(--bg2);
       border: none;
-      padding: 6px 14px;
+      padding: 7px 14px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 500;
       color: var(--text2);
       cursor: pointer;
       white-space: nowrap;
+      font-family: inherit;
       transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
     .filter-btn.active {
       background: var(--accent);
       color: white;
     }
-    .section {
-      padding: 16px 16px 0;
+    .filter-btn:hover:not(.active) {
+      background: var(--border);
     }
+
+    /* ── MOBILE LAYOUT (default) ── */
+    .mobile-layout { display: block; }
+    .desktop-layout { display: none; }
+
+    .section { padding: 14px 16px 0; }
+
     .section-header {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 10px;
     }
+
     .section-title {
       font-size: 11px;
       font-weight: 600;
@@ -98,6 +139,7 @@
       letter-spacing: 0.07em;
       color: var(--muted);
     }
+
     .section-count {
       background: var(--bg2);
       color: var(--muted);
@@ -106,39 +148,45 @@
       padding: 1px 7px;
       border-radius: 10px;
     }
+
     .cards { display: flex; flex-direction: column; gap: 8px; }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 14px;
       box-shadow: 0 1px 3px var(--shadow);
-      transition: all 0.15s;
+      transition: transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
     }
     .card:active { transform: scale(0.98); }
+
     .card-title {
       font-size: 14px;
       font-weight: 500;
       line-height: 1.4;
       margin-bottom: 8px;
-      color: var(--text);
     }
+
     .card-meta {
       display: flex;
       align-items: center;
       gap: 6px;
       flex-wrap: wrap;
     }
+
     .tag {
       font-size: 11px;
       font-weight: 600;
       padding: 2px 8px;
       border-radius: 20px;
     }
-    .tag-job { color: var(--job); background: var(--job-bg); }
-    .tag-finance { color: var(--finance); background: var(--finance-bg); }
+    .tag-job      { color: var(--job);      background: var(--job-bg); }
+    .tag-finance  { color: var(--finance);  background: var(--finance-bg); }
     .tag-personal { color: var(--personal); background: var(--personal-bg); }
-    .tag-roots { color: var(--roots); background: var(--roots-bg); }
+    .tag-roots    { color: var(--roots);    background: var(--roots-bg); }
+
     .estimate {
       font-size: 11px;
       color: var(--muted);
@@ -146,24 +194,109 @@
       padding: 2px 7px;
       border-radius: 10px;
     }
-    .ai-badge {
-      font-size: 10px;
-      color: var(--muted);
+
+    .ai-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
       margin-left: auto;
+      flex-shrink: 0;
     }
+    .ai-high    { background: #D97757; }
+    .ai-medium  { background: #f59e0b; }
+    .ai-low     { background: #94a3b8; }
+
+    .inprogress-card { border-left: 3px solid var(--inprogress-bar); }
+    .waiting-card    { border-left: 3px solid var(--waiting-bar); }
+
     .divider {
       height: 1px;
       background: var(--border);
-      margin: 16px 16px 0;
+      margin: 14px 16px 0;
     }
+
     .empty {
       text-align: center;
       color: var(--muted);
       font-size: 13px;
-      padding: 24px 0;
+      padding: 32px 0;
     }
-    .inprogress-card { border-left: 3px solid var(--accent); }
-    .waiting-card { border-left: 3px solid #94a3b8; }
+
+    .pb { padding-bottom: 32px; }
+
+    /* ── DESKTOP LAYOUT ── */
+    @media (min-width: 768px) {
+      .mobile-layout { display: none; }
+      .desktop-layout { display: flex; }
+
+      body { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+      header { padding: 14px 24px 12px; }
+      h1 { font-size: 1.3rem; }
+
+      .board {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 20px 24px 24px;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .column {
+        background: var(--bg2);
+        border-radius: 12px;
+        min-width: 320px;
+        max-width: 320px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        flex-shrink: 0;
+      }
+
+      .column-header {
+        padding: 14px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .column-title {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--muted);
+      }
+
+      .column-count {
+        background: var(--card);
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 500;
+        padding: 2px 9px;
+        border-radius: 12px;
+        box-shadow: 0 1px 2px var(--shadow);
+      }
+
+      .column-cards {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 12px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .column-cards .card { background: var(--card); }
+      .column-cards .card:hover {
+        box-shadow: 0 3px 10px rgba(20,20,19,0.1);
+        transform: translateY(-1px);
+      }
+
+      .inprogress-col .column-title { color: var(--accent); }
+      .waiting-col .column-title { color: var(--waiting-bar); }
+    }
   </style>
 </head>
 <body>
@@ -171,28 +304,63 @@
 <header>
   <div class="header-top">
     <h1>⌘ Command</h1>
-    <span class="count-badge" id="total-count">0</span>
+    <div class="header-badges">
+      <span class="badge badge-muted" id="filter-label">All</span>
+      <span class="badge" id="total-count">0</span>
+    </div>
   </div>
   <div class="filters">
-    <button class="filter-btn active" onclick="setFilter('all')">All</button>
-    <button class="filter-btn" onclick="setFilter('job')">💼 Job</button>
-    <button class="filter-btn" onclick="setFilter('finance')">💰 Finance</button>
-    <button class="filter-btn" onclick="setFilter('personal')">👤 Personal</button>
-    <button class="filter-btn" onclick="setFilter('roots')">🌱 Roots</button>
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('job', this)">💼 Job</button>
+    <button class="filter-btn" onclick="setFilter('finance', this)">💰 Finance</button>
+    <button class="filter-btn" onclick="setFilter('personal', this)">👤 Personal</button>
+    <button class="filter-btn" onclick="setFilter('roots', this)">🌱 Roots</button>
   </div>
 </header>
 
-<div id="app"></div>
+<!-- MOBILE -->
+<div class="mobile-layout" id="mobile-view"></div>
+
+<!-- DESKTOP -->
+<div class="desktop-layout" id="desktop-view">
+  <div class="board">
+    <div class="column inprogress-col">
+      <div class="column-header">
+        <span class="column-title">In Progress</span>
+        <span class="column-count" id="d-ip-count">0</span>
+      </div>
+      <div class="column-cards" id="d-inprogress"></div>
+    </div>
+    <div class="column">
+      <div class="column-header">
+        <span class="column-title">Todo</span>
+        <span class="column-count" id="d-todo-count">0</span>
+      </div>
+      <div class="column-cards" id="d-todo"></div>
+    </div>
+    <div class="column waiting-col">
+      <div class="column-header">
+        <span class="column-title">Waiting</span>
+        <span class="column-count" id="d-wait-count">0</span>
+      </div>
+      <div class="column-cards" id="d-waiting"></div>
+    </div>
+  </div>
+</div>
 
 <script>
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 
 const TASKS = {
+  inprogress: [
+    { title: "Book doctors appointments — insurance ends Apr 30", tag: "personal", estimate: "20m", ai: "medium" },
+    { title: "Junior AI Round 2 prep — Wed Apr 22 11am", tag: "job", estimate: "1h", ai: "high" },
+    { title: "Justworks Round 2 prep — Thu Apr 23 11:30am w/ Tushar Sharma", tag: "job", estimate: "1h", ai: "high" },
+    { title: "Kira Learning Round 3 prep — reschedule TBD", tag: "job", estimate: "30m", ai: "high" },
+  ],
   todo: [
     { title: "🚨 Gorgias case study — submit by Fri Apr 24", tag: "job", estimate: "6h", ai: "high" },
-    { title: "Junior AI Round 2 — prep for Wed Apr 22 11am", tag: "job", estimate: "1h", ai: "high" },
-    { title: "Justworks Round 2 — prep for Thu Apr 23 11:30am", tag: "job", estimate: "1h", ai: "high" },
     { title: "Millennium Round 2 — take-home + panel prep", tag: "job", estimate: "2h", ai: "high" },
     { title: "Reply to Savannah Newkirk (Beeper recruiter)", tag: "job", estimate: "5m", ai: "medium" },
     { title: "Reply to Elisa Elias Medina (Datadog — Beeper)", tag: "job", estimate: "10m", ai: "medium" },
@@ -214,13 +382,9 @@ const TASKS = {
     { title: "Get Theory pants hemmed — Flatiron", tag: "personal", estimate: "20m", ai: "low" },
     { title: "Cancel Google Play subscription", tag: "personal", estimate: "5m", ai: "low" },
     { title: "Finish porting Google Photos", tag: "personal", estimate: "30m", ai: "low" },
-    { title: "Book San Sebastian trip with Victoria (~$3K)", tag: "personal", estimate: "1h", ai: "high" },
+    { title: "Book San Sebastian trip with Victoria (~$3K total)", tag: "personal", estimate: "1h", ai: "high" },
     { title: "Research webcam with microphone for Zoom", tag: "personal", estimate: "30m", ai: "high" },
     { title: "Move Command to OpenClaw", tag: "personal", estimate: "1h", ai: "medium" },
-  ],
-  inprogress: [
-    { title: "Book doctors appointments — insurance ends Apr 30", tag: "personal", estimate: "20m", ai: "medium" },
-    { title: "Kira Learning Round 3 prep — reschedule TBD", tag: "job", estimate: "30m", ai: "high" },
   ],
   waiting: [
     { title: "Hightouch Round 2 — scheduling pending", tag: "job", estimate: "1h", ai: "high" },
@@ -230,71 +394,73 @@ const TASKS = {
   ]
 };
 
+const TAG_LABELS = { job: '💼 Job', finance: '💰 Finance', personal: '👤 Personal', roots: '🌱 Roots' };
+const SECTION_LABELS = { inprogress: 'In Progress', todo: 'Todo', waiting: 'Waiting' };
+const SECTION_ORDER = ['inprogress', 'todo', 'waiting'];
+
 let activeFilter = 'all';
 
-function setFilter(filter) {
+function setFilter(filter, btn) {
   activeFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('filter-label').textContent = btn.textContent.replace(/^[^\w]+/, '').trim() || 'All';
   render();
 }
 
-function filterTasks(tasks) {
-  if (activeFilter === 'all') return tasks;
-  return tasks.filter(t => t.tag === activeFilter);
+function filtered(tasks) {
+  return activeFilter === 'all' ? tasks : tasks.filter(t => t.tag === activeFilter);
 }
 
-function tagClass(tag) {
-  return `tag tag-${tag}`;
-}
-
-function tagLabel(tag) {
-  const labels = { job: '💼 Job', finance: '💰 Finance', personal: '👤 Personal', roots: '🌱 Roots' };
-  return labels[tag] || tag;
-}
-
-function renderCard(task, type) {
-  const extraClass = type === 'inprogress' ? ' inprogress-card' : type === 'waiting' ? ' waiting-card' : '';
-  return `
-    <div class="card${extraClass}">
-      <div class="card-title">${task.title}</div>
-      <div class="card-meta">
-        <span class="${tagClass(task.tag)}">${tagLabel(task.tag)}</span>
-        <span class="estimate">${task.estimate}</span>
-        <span class="ai-badge">AI: ${task.ai}</span>
-      </div>
-    </div>`;
-}
-
-function renderSection(title, tasks, type) {
-  const filtered = filterTasks(tasks);
-  if (filtered.length === 0) return '';
-  return `
-    <div class="section">
-      <div class="section-header">
-        <span class="section-title">${title}</span>
-        <span class="section-count">${filtered.length}</span>
-      </div>
-      <div class="cards">${filtered.map(t => renderCard(t, type)).join('')}</div>
+function cardHTML(task, type) {
+  const extra = type === 'inprogress' ? ' inprogress-card' : type === 'waiting' ? ' waiting-card' : '';
+  return `<div class="card${extra}">
+    <div class="card-title">${task.title}</div>
+    <div class="card-meta">
+      <span class="tag tag-${task.tag}">${TAG_LABELS[task.tag]}</span>
+      <span class="estimate">${task.estimate}</span>
+      <span class="ai-dot ai-${task.ai}" title="AI: ${task.ai}"></span>
     </div>
-    <div class="divider"></div>`;
+  </div>`;
 }
 
 function render() {
-  const todoFiltered = filterTasks(TASKS.todo);
-  const ipFiltered = filterTasks(TASKS.inprogress);
-  const waitFiltered = filterTasks(TASKS.waiting);
-  const total = todoFiltered.length + ipFiltered.length + waitFiltered.length;
+  let totalVisible = 0;
 
-  document.getElementById('total-count').textContent = total;
+  // Mobile
+  const mobile = document.getElementById('mobile-view');
+  let mobileHTML = '';
+  let first = true;
+  for (const section of SECTION_ORDER) {
+    const tasks = filtered(TASKS[section]);
+    if (!tasks.length) continue;
+    totalVisible += tasks.length;
+    if (!first) mobileHTML += '<div class="divider"></div>';
+    first = false;
+    mobileHTML += `<div class="section">
+      <div class="section-header">
+        <span class="section-title">${SECTION_LABELS[section]}</span>
+        <span class="section-count">${tasks.length}</span>
+      </div>
+      <div class="cards">${tasks.map(t => cardHTML(t, section)).join('')}</div>
+    </div>`;
+  }
+  if (!mobileHTML) mobileHTML = '<div class="empty">No tasks for this filter</div>';
+  mobile.innerHTML = mobileHTML + '<div class="pb"></div>';
 
-  const sections = [
-    renderSection('In Progress', TASKS.inprogress, 'inprogress'),
-    renderSection('Todo', TASKS.todo, 'todo'),
-    renderSection('Waiting', TASKS.waiting, 'waiting'),
-  ].filter(Boolean).join('');
+  // Desktop
+  for (const section of SECTION_ORDER) {
+    const tasks = filtered(TASKS[section]);
+    const idMap = { inprogress: 'd-inprogress', todo: 'd-todo', waiting: 'd-waiting' };
+    const countMap = { inprogress: 'd-ip-count', todo: 'd-todo-count', waiting: 'd-wait-count' };
+    const el = document.getElementById(idMap[section]);
+    const ct = document.getElementById(countMap[section]);
+    if (el) el.innerHTML = tasks.length ? tasks.map(t => cardHTML(t, section)).join('') : '<div class="empty">No tasks</div>';
+    if (ct) ct.textContent = tasks.length;
+  }
 
-  document.getElementById('app').innerHTML = sections || '<div class="empty">No tasks for this filter</div>';
+  document.getElementById('total-count').textContent =
+    SECTION_ORDER.reduce((n, s) => n + filtered(TASKS[s]).length, 0);
 }
 
 render();
