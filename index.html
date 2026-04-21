@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Command</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f5;
+      --bg2: #f2f1ec;
+      --card: #ffffff;
+      --text: #141413;
+      --text2: #5c5c5a;
+      --muted: #8c8c8a;
+      --accent: #D97757;
+      --border: #e5e4df;
+      --shadow: rgba(20,20,19,0.06);
+      --job: #3b82f6;
+      --job-bg: #eff6ff;
+      --finance: #16a34a;
+      --finance-bg: #f0fdf4;
+      --personal: #7c3aed;
+      --personal-bg: #f5f3ff;
+      --roots: #D97757;
+      --roots-bg: #fff7ed;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px 10px;
+      z-index: 100;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; }
+    .count-badge {
+      background: var(--accent);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .filters {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      background: var(--bg2);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+    .section {
+      padding: 16px 16px 0;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+    }
+    .section-count {
+      background: var(--bg2);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+    .cards { display: flex; flex-direction: column; gap: 8px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 3px var(--shadow);
+      transition: all 0.15s;
+    }
+    .card:active { transform: scale(0.98); }
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .tag-job { color: var(--job); background: var(--job-bg); }
+    .tag-finance { color: var(--finance); background: var(--finance-bg); }
+    .tag-personal { color: var(--personal); background: var(--personal-bg); }
+    .tag-roots { color: var(--roots); background: var(--roots-bg); }
+    .estimate {
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--bg2);
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+    .ai-badge {
+      font-size: 10px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 16px 0;
+    }
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 24px 0;
+    }
+    .inprogress-card { border-left: 3px solid var(--accent); }
+    .waiting-card { border-left: 3px solid #94a3b8; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1>⌘ Command</h1>
+    <span class="count-badge" id="total-count">0</span>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all')">All</button>
+    <button class="filter-btn" onclick="setFilter('job')">💼 Job</button>
+    <button class="filter-btn" onclick="setFilter('finance')">💰 Finance</button>
+    <button class="filter-btn" onclick="setFilter('personal')">👤 Personal</button>
+    <button class="filter-btn" onclick="setFilter('roots')">🌱 Roots</button>
+  </div>
+</header>
+
+<div id="app"></div>
+
+<script>
+window.Telegram?.WebApp?.ready();
+window.Telegram?.WebApp?.expand();
+
+const TASKS = {
+  todo: [
+    { title: "🚨 Gorgias case study — submit by Fri Apr 24", tag: "job", estimate: "6h", ai: "high" },
+    { title: "Junior AI Round 2 — prep for Wed Apr 22 11am", tag: "job", estimate: "1h", ai: "high" },
+    { title: "Justworks Round 2 — prep for Thu Apr 23 11:30am", tag: "job", estimate: "1h", ai: "high" },
+    { title: "Millennium Round 2 — take-home + panel prep", tag: "job", estimate: "2h", ai: "high" },
+    { title: "Reply to Savannah Newkirk (Beeper recruiter)", tag: "job", estimate: "5m", ai: "medium" },
+    { title: "Reply to Elisa Elias Medina (Datadog — Beeper)", tag: "job", estimate: "10m", ai: "medium" },
+    { title: "Reply to Dom Dickinson (Beeper)", tag: "job", estimate: "5m", ai: "high" },
+    { title: "Complete Datadog referral form", tag: "job", estimate: "10m", ai: "low" },
+    { title: "Spend FSA balance — $660 by Apr 30", tag: "finance", estimate: "30m", ai: "medium" },
+    { title: "Decide Capital One 0% APR expiring May 18", tag: "finance", estimate: "20m", ai: "medium" },
+    { title: "Exercise Roots stock options — $2,181 by Jul 2", tag: "roots", estimate: "1h", ai: "medium" },
+    { title: "Collect uncle's bar repayment ($3,200)", tag: "finance", estimate: "5m", ai: "low" },
+    { title: "Figure out Equinox cancellation — letter rejected", tag: "finance", estimate: "15m", ai: "medium" },
+    { title: "Investigate 3x Headway charges ($30 each)", tag: "finance", estimate: "10m", ai: "low" },
+    { title: "Categorize MyClaw.ai charges in Copilot", tag: "finance", estimate: "5m", ai: "medium" },
+    { title: "Figure out Capital One car situation", tag: "finance", estimate: "30m", ai: "low" },
+    { title: "Message Dr Belloir about insurance ending", tag: "personal", estimate: "10m", ai: "medium" },
+    { title: "Reply to friend re: Friday visit (929-395-6343)", tag: "personal", estimate: "5m", ai: "low" },
+    { title: "Reply to Mom re: Maddie photo", tag: "personal", estimate: "3m", ai: "low" },
+    { title: "Pick up Rx — Azelastine at Duane Reade 2069 Broadway", tag: "personal", estimate: "15m", ai: "low" },
+    { title: "Return MOSCOT sunglasses ($402.84)", tag: "personal", estimate: "15m", ai: "low" },
+    { title: "Get Theory pants hemmed — Flatiron", tag: "personal", estimate: "20m", ai: "low" },
+    { title: "Cancel Google Play subscription", tag: "personal", estimate: "5m", ai: "low" },
+    { title: "Finish porting Google Photos", tag: "personal", estimate: "30m", ai: "low" },
+    { title: "Book San Sebastian trip with Victoria (~$3K)", tag: "personal", estimate: "1h", ai: "high" },
+    { title: "Research webcam with microphone for Zoom", tag: "personal", estimate: "30m", ai: "high" },
+    { title: "Move Command to OpenClaw", tag: "personal", estimate: "1h", ai: "medium" },
+  ],
+  inprogress: [
+    { title: "Book doctors appointments — insurance ends Apr 30", tag: "personal", estimate: "20m", ai: "medium" },
+    { title: "Kira Learning Round 3 prep — reschedule TBD", tag: "job", estimate: "30m", ai: "high" },
+  ],
+  waiting: [
+    { title: "Hightouch Round 2 — scheduling pending", tag: "job", estimate: "1h", ai: "high" },
+    { title: "Ryan Jones (Beeper) — waiting for next step", tag: "job", estimate: "2m", ai: "low" },
+    { title: "Zinus — better documentation needed", tag: "personal", estimate: "20m", ai: "low" },
+    { title: "1Password — new credit cards arriving", tag: "personal", estimate: "10m", ai: "low" },
+  ]
+};
+
+let activeFilter = 'all';
+
+function setFilter(filter) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function filterTasks(tasks) {
+  if (activeFilter === 'all') return tasks;
+  return tasks.filter(t => t.tag === activeFilter);
+}
+
+function tagClass(tag) {
+  return `tag tag-${tag}`;
+}
+
+function tagLabel(tag) {
+  const labels = { job: '💼 Job', finance: '💰 Finance', personal: '👤 Personal', roots: '🌱 Roots' };
+  return labels[tag] || tag;
+}
+
+function renderCard(task, type) {
+  const extraClass = type === 'inprogress' ? ' inprogress-card' : type === 'waiting' ? ' waiting-card' : '';
+  return `
+    <div class="card${extraClass}">
+      <div class="card-title">${task.title}</div>
+      <div class="card-meta">
+        <span class="${tagClass(task.tag)}">${tagLabel(task.tag)}</span>
+        <span class="estimate">${task.estimate}</span>
+        <span class="ai-badge">AI: ${task.ai}</span>
+      </div>
+    </div>`;
+}
+
+function renderSection(title, tasks, type) {
+  const filtered = filterTasks(tasks);
+  if (filtered.length === 0) return '';
+  return `
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">${title}</span>
+        <span class="section-count">${filtered.length}</span>
+      </div>
+      <div class="cards">${filtered.map(t => renderCard(t, type)).join('')}</div>
+    </div>
+    <div class="divider"></div>`;
+}
+
+function render() {
+  const todoFiltered = filterTasks(TASKS.todo);
+  const ipFiltered = filterTasks(TASKS.inprogress);
+  const waitFiltered = filterTasks(TASKS.waiting);
+  const total = todoFiltered.length + ipFiltered.length + waitFiltered.length;
+
+  document.getElementById('total-count').textContent = total;
+
+  const sections = [
+    renderSection('In Progress', TASKS.inprogress, 'inprogress'),
+    renderSection('Todo', TASKS.todo, 'todo'),
+    renderSection('Waiting', TASKS.waiting, 'waiting'),
+  ].filter(Boolean).join('');
+
+  document.getElementById('app').innerHTML = sections || '<div class="empty">No tasks for this filter</div>';
+}
+
+render();
+</script>
+</body>
+</html>
