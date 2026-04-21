@@ -196,10 +196,11 @@
     }
 
     .ai-dot {
-      width: 7px; height: 7px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       margin-left: auto;
       flex-shrink: 0;
+      display: inline-block;
     }
     .ai-high    { background: #D97757; }
     .ai-medium  { background: #f59e0b; }
@@ -354,13 +355,13 @@ window.Telegram?.WebApp?.expand();
 
 const TASKS = {
   inprogress: [
-    { title: "Book doctors appointments — insurance ends Apr 30", tag: "personal", estimate: "20m", ai: "medium" },
+    { title: "🚨 Gorgias case study — submit by Fri Apr 24", tag: "job", estimate: "6h", ai: "high" },
     { title: "Junior AI Round 2 prep — Wed Apr 22 11am", tag: "job", estimate: "1h", ai: "high" },
     { title: "Justworks Round 2 prep — Thu Apr 23 11:30am w/ Tushar Sharma", tag: "job", estimate: "1h", ai: "high" },
     { title: "Kira Learning Round 3 prep — reschedule TBD", tag: "job", estimate: "30m", ai: "high" },
+    { title: "Book doctors appointments — insurance ends Apr 30", tag: "personal", estimate: "20m", ai: "medium" },
   ],
   todo: [
-    { title: "🚨 Gorgias case study — submit by Fri Apr 24", tag: "job", estimate: "6h", ai: "high" },
     { title: "Millennium Round 2 — take-home + panel prep", tag: "job", estimate: "2h", ai: "high" },
     { title: "Reply to Savannah Newkirk (Beeper recruiter)", tag: "job", estimate: "5m", ai: "medium" },
     { title: "Reply to Elisa Elias Medina (Datadog — Beeper)", tag: "job", estimate: "10m", ai: "medium" },
@@ -419,7 +420,7 @@ function cardHTML(task, type) {
     <div class="card-meta">
       <span class="tag tag-${task.tag}">${TAG_LABELS[task.tag]}</span>
       <span class="estimate">${task.estimate}</span>
-      <span class="ai-dot ai-${task.ai}" title="AI: ${task.ai}"></span>
+      <span class="ai-dot ai-${task.ai}" title="AI assist: ${task.ai}"></span>
     </div>
   </div>`;
 }
