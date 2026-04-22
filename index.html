@@ -350,6 +350,34 @@
       margin-top: 4px;
     }
     .delete-btn:active { transform: scale(0.98); }
+    .edit-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: 1.5px solid #bfdbfe;
+      background: #eff6ff;
+      color: #3b82f6;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    .edit-btn:active { transform: scale(0.98); }
+    .card-desc {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 4px;
+      margin-bottom: 4px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     /* Add sheet form */
     .form-group { margin-bottom: 14px; }
@@ -571,7 +599,40 @@
       <button class="move-btn" id="mv-waiting" onclick="moveTask('waiting')">⏳ Waiting</button>
       <button class="move-btn" id="mv-done" onclick="moveTask('done')">✅ Done</button>
     </div>
+    <button class="edit-btn" onclick="openEditSheet()">✏️ Edit task</button>
     <button class="delete-btn" onclick="deleteTask()">🗑 Delete task</button>
+  </div>
+</div>
+
+<!-- EDIT TASK SHEET -->
+<div class="sheet-backdrop" id="edit-backdrop" onclick="closeEditSheet()"></div>
+<div class="sheet" id="edit-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-content">
+    <div class="sheet-title">Edit Task</div>
+    <div class="form-group">
+      <label class="form-label">Title</label>
+      <input class="form-input" id="edit-title" type="text" placeholder="Task title" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description (optional)</label>
+      <textarea class="form-input" id="edit-desc" rows="2" placeholder="Add more context..." style="resize:vertical;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tag</label>
+      <select class="form-select" id="edit-tag">
+        <option value="job">💼 Job</option>
+        <option value="finance">💰 Finance</option>
+        <option value="personal">👤 Personal</option>
+        <option value="roots">🌱 Roots</option>
+        <option value="dev">🖥 Dev</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Estimate (optional)</label>
+      <input class="form-input" id="edit-estimate" type="text" placeholder="e.g. 30m, 2h" />
+    </div>
+    <button class="submit-btn" id="edit-submit" onclick="submitEditTask()">Save Changes</button>
   </div>
 </div>
 
@@ -633,7 +694,9 @@ let selectedTaskIndex = null;
 function parseTasks(md) {
   const result = { todo: [], inprogress: [], waiting: [], done: [] };
   let current = null;
-  for (const raw of md.split('\n')) {
+  const lines = md.split('\n');
+  for (let li = 0; li < lines.length; li++) {
+    const raw = lines[li];
     const line = raw.trim();
     if (line === '## Todo') { current = 'todo'; continue; }
     if (line === '## In Progress') { current = 'inprogress'; continue; }
@@ -648,11 +711,18 @@ function parseTasks(md) {
     const tagMatch = meta.match(/tag:([\w]+)/);
     const estMatch = meta.match(/^([^,]+),/);
     const aiMatch = meta.match(/ai:([\w]+)/);
+    // Check next line for description sub-bullet (2-space indent)
+    let description = '';
+    if (li + 1 < lines.length && lines[li + 1].startsWith('  - ')) {
+      description = lines[li + 1].slice(4).trim();
+      li++; // skip description line
+    }
     result[current].push({
       title: titleRaw,
       tag: tagMatch ? tagMatch[1] : 'personal',
       estimate: estMatch ? estMatch[1].trim() : '',
       ai: aiMatch ? aiMatch[1] : 'low',
+      description,
     });
   }
   return result;
@@ -673,6 +743,7 @@ function serializeTasks(tasks) {
       const est = t.estimate || '';
       const comment = est ? ` <!-- ${est}, tag:${t.tag}, ai:${t.ai} -->` : ` <!-- tag:${t.tag}, ai:${t.ai} -->`;
       md += `${prefix}${t.title}${comment}\n`;
+      if (t.description) md += `  - ${t.description}\n`;
     }
     md += '\n';
   }
@@ -756,8 +827,10 @@ function cardHTML(task, section, index) {
   const extra = section === 'inprogress' ? ' inprogress-card' : section === 'waiting' ? ' waiting-card' : '';
   const est = task.estimate ? `<span class="estimate">${task.estimate}</span>` : '';
   const tagLabel = TAG_LABELS[task.tag] || task.tag;
+  const desc = task.description ? `<div class="card-desc">${escHTML(task.description)}</div>` : '';
   return `<div class="card${extra}" onclick="openCardSheet('${section}', ${index})">
     <div class="card-title">${escHTML(task.title)}</div>
+    ${desc}
     <div class="card-meta">
       <span class="tag tag-${task.tag}">${tagLabel}</span>
       ${est}
@@ -876,13 +949,59 @@ async function submitAddTask() {
   btn.disabled = true;
   btn.textContent = 'Saving...';
   const newTasks = JSON.parse(JSON.stringify(TASKS));
-  newTasks[section].unshift({ title, tag, estimate, ai: 'medium' });
+  newTasks[section].unshift({ title, tag, estimate, ai: 'medium', description: '' });
   closeAddSheet();
   try {
     await writeTasks(newTasks);
   } finally {
     btn.disabled = false;
     btn.textContent = 'Add Task';
+  }
+}
+
+function openEditSheet() {
+  if (selectedTaskSection === null || selectedTaskIndex === null) return;
+  const sec = selectedTaskSection, idx = selectedTaskIndex;
+  closeCardSheet();
+  const task = TASKS[sec][idx];
+  document.getElementById('edit-title').value = task.title || '';
+  document.getElementById('edit-desc').value = task.description || '';
+  document.getElementById('edit-tag').value = task.tag || 'personal';
+  document.getElementById('edit-estimate').value = task.estimate || '';
+  selectedTaskSection = sec;
+  selectedTaskIndex = idx;
+  document.getElementById('edit-backdrop').classList.add('open');
+  document.getElementById('edit-sheet').classList.add('open');
+  setTimeout(() => document.getElementById('edit-title').focus(), 300);
+}
+
+function closeEditSheet() {
+  document.getElementById('edit-backdrop').classList.remove('open');
+  document.getElementById('edit-sheet').classList.remove('open');
+}
+
+async function submitEditTask() {
+  const title = document.getElementById('edit-title').value.trim();
+  if (!title) { document.getElementById('edit-title').focus(); return; }
+  const description = document.getElementById('edit-desc').value.trim();
+  const tag = document.getElementById('edit-tag').value;
+  const estimate = document.getElementById('edit-estimate').value.trim();
+  const btn = document.getElementById('edit-submit');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const newTasks = JSON.parse(JSON.stringify(TASKS));
+  const task = newTasks[selectedTaskSection][selectedTaskIndex];
+  task.title = title;
+  task.description = description;
+  task.tag = tag;
+  task.estimate = estimate;
+  const sec = selectedTaskSection, idx = selectedTaskIndex;
+  closeEditSheet();
+  try {
+    await writeTasks(newTasks);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save Changes';
   }
 }
 
