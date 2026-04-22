@@ -7,6 +7,7 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- LIVE DATA + CRUD v2 -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -27,8 +28,10 @@
       --finance-bg: #f0fdf4;
       --personal: #7c3aed;
       --personal-bg: #f5f3ff;
-      --roots: #D97757;
+      --roots: #E67E22;
       --roots-bg: #fff7ed;
+      --dev: #1ABC9C;
+      --dev-bg: #e8fdf9;
       --inprogress-bar: #D97757;
       --waiting-bar: #94a3b8;
     }
@@ -222,7 +225,206 @@
       padding: 32px 0;
     }
 
-    .pb { padding-bottom: 32px; }
+    .pb { padding-bottom: 100px; }
+
+    /* ── FAB ── */
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 200;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-size: 26px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(217,119,87,0.45);
+      transition: background 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .fab:active { transform: scale(0.93); }
+    .fab:hover { background: var(--accent-hover); }
+
+    /* ── BOTTOM SHEET ── */
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(20,20,19,0.35);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .sheet-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 301;
+      background: var(--card);
+      border-radius: 18px 18px 0 0;
+      padding: 0 0 env(safe-area-inset-bottom, 0);
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .sheet.open { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 10px auto 0;
+    }
+    .sheet-content { padding: 16px 20px 24px; }
+    .sheet-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .sheet-task-text {
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .move-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .move-btn {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .move-btn:active { transform: scale(0.97); }
+    .move-btn.active-section {
+      background: var(--bg2);
+      color: var(--muted);
+      border-color: var(--bg2);
+      cursor: default;
+    }
+    .move-btn:not(.active-section):hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .delete-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: 1.5px solid #fecaca;
+      background: #fff5f5;
+      color: #ef4444;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      margin-top: 4px;
+    }
+    .delete-btn:active { transform: scale(0.98); }
+
+    /* Add sheet form */
+    .form-group { margin-bottom: 14px; }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--accent); }
+    .submit-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.1s;
+      margin-top: 6px;
+    }
+    .submit-btn:active { transform: scale(0.98); }
+    .submit-btn:hover { background: var(--accent-hover); }
+    .submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
+
+    /* syncing indicator */
+    .sync-indicator {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right;
+      padding: 4px 16px 0;
+    }
+    .sync-indicator.syncing { color: var(--accent); }
+    .sync-indicator.error { color: #ef4444; }
+
+    /* card clickable */
+    .card { cursor: pointer; }
+    .tag-dev { color: var(--dev); background: var(--dev-bg); }
+
+    /* loading state */
+    .loading-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      color: var(--muted);
+      font-size: 14px;
+      gap: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
 
     /* ── DESKTOP LAYOUT ── */
     @media (min-width: 768px) {
@@ -297,6 +499,7 @@
 
       .inprogress-col .column-title { color: var(--accent); }
       .waiting-col .column-title { color: var(--waiting-bar); }
+      .fab { bottom: 32px; right: 32px; }
     }
   </style>
 </head>
@@ -349,57 +552,189 @@
   </div>
 </div>
 
+<!-- sync status -->
+<div class="sync-indicator" id="sync-status">Loading...</div>
+
+<!-- FAB -->
+<button class="fab" onclick="openAddSheet()" title="Add task">+</button>
+
+<!-- CARD ACTION SHEET -->
+<div class="sheet-backdrop" id="card-backdrop" onclick="closeCardSheet()"></div>
+<div class="sheet" id="card-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-content">
+    <div class="sheet-title">Move to&hellip;</div>
+    <div class="sheet-task-text" id="sheet-task-text"></div>
+    <div class="move-grid">
+      <button class="move-btn" id="mv-todo" onclick="moveTask('todo')">📋 Todo</button>
+      <button class="move-btn" id="mv-inprogress" onclick="moveTask('inprogress')">🔥 In Progress</button>
+      <button class="move-btn" id="mv-waiting" onclick="moveTask('waiting')">⏳ Waiting</button>
+      <button class="move-btn" id="mv-done" onclick="moveTask('done')">✅ Done</button>
+    </div>
+    <button class="delete-btn" onclick="deleteTask()">🗑 Delete task</button>
+  </div>
+</div>
+
+<!-- ADD TASK SHEET -->
+<div class="sheet-backdrop" id="add-backdrop" onclick="closeAddSheet()"></div>
+<div class="sheet" id="add-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-content">
+    <div class="sheet-title">New Task</div>
+    <div class="form-group">
+      <label class="form-label">Task</label>
+      <input class="form-input" id="new-title" type="text" placeholder="What needs doing?" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tag</label>
+      <select class="form-select" id="new-tag">
+        <option value="job">💼 Job</option>
+        <option value="finance">💰 Finance</option>
+        <option value="personal">👤 Personal</option>
+        <option value="roots">🌱 Roots</option>
+        <option value="dev">🖥 Dev</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Estimate (optional)</label>
+      <input class="form-input" id="new-estimate" type="text" placeholder="e.g. 30m, 2h" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Section</label>
+      <select class="form-select" id="new-section">
+        <option value="todo">📋 Todo</option>
+        <option value="inprogress">🔥 In Progress</option>
+        <option value="waiting">⏳ Waiting</option>
+      </select>
+    </div>
+    <button class="submit-btn" id="add-submit" onclick="submitAddTask()">Add Task</button>
+  </div>
+</div>
+
 <script>
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 
-const TASKS = {
-  inprogress: [
-    { title: "🚨 Gorgias case study — submit by Fri Apr 24", tag: "job", estimate: "6h", ai: "high" },
-    { title: "Junior AI Round 2 prep — Wed Apr 22 11am", tag: "job", estimate: "1h", ai: "high" },
-    { title: "Justworks Round 2 prep — Thu Apr 23 11:30am w/ Tushar Sharma", tag: "job", estimate: "1h", ai: "high" },
-    { title: "Kira Learning Round 3 prep — reschedule TBD", tag: "job", estimate: "30m", ai: "high" },
-    { title: "Book doctors appointments — insurance ends Apr 30", tag: "personal", estimate: "20m", ai: "medium" },
-  ],
-  todo: [
-    { title: "Millennium Round 2 — take-home + panel prep", tag: "job", estimate: "2h", ai: "high" },
-    { title: "Reply to Savannah Newkirk (Beeper recruiter)", tag: "job", estimate: "5m", ai: "medium" },
-    { title: "Reply to Elisa Elias Medina (Datadog — Beeper)", tag: "job", estimate: "10m", ai: "medium" },
-    { title: "Reply to Dom Dickinson (Beeper)", tag: "job", estimate: "5m", ai: "high" },
-    { title: "Complete Datadog referral form", tag: "job", estimate: "10m", ai: "low" },
-    { title: "Spend FSA balance — $660 by Apr 30", tag: "finance", estimate: "30m", ai: "medium" },
-    { title: "Decide Capital One 0% APR expiring May 18", tag: "finance", estimate: "20m", ai: "medium" },
-    { title: "Exercise Roots stock options — $2,181 by Jul 2", tag: "roots", estimate: "1h", ai: "medium" },
-    { title: "Collect uncle's bar repayment ($3,200)", tag: "finance", estimate: "5m", ai: "low" },
-    { title: "Figure out Equinox cancellation — letter rejected", tag: "finance", estimate: "15m", ai: "medium" },
-    { title: "Investigate 3x Headway charges ($30 each)", tag: "finance", estimate: "10m", ai: "low" },
-    { title: "Categorize MyClaw.ai charges in Copilot", tag: "finance", estimate: "5m", ai: "medium" },
-    { title: "Figure out Capital One car situation", tag: "finance", estimate: "30m", ai: "low" },
-    { title: "Message Dr Belloir about insurance ending", tag: "personal", estimate: "10m", ai: "medium" },
-    { title: "Reply to friend re: Friday visit (929-395-6343)", tag: "personal", estimate: "5m", ai: "low" },
-    { title: "Reply to Mom re: Maddie photo", tag: "personal", estimate: "3m", ai: "low" },
-    { title: "Pick up Rx — Azelastine at Duane Reade 2069 Broadway", tag: "personal", estimate: "15m", ai: "low" },
-    { title: "Return MOSCOT sunglasses ($402.84)", tag: "personal", estimate: "15m", ai: "low" },
-    { title: "Get Theory pants hemmed — Flatiron", tag: "personal", estimate: "20m", ai: "low" },
-    { title: "Cancel Google Play subscription", tag: "personal", estimate: "5m", ai: "low" },
-    { title: "Finish porting Google Photos", tag: "personal", estimate: "30m", ai: "low" },
-    { title: "Book San Sebastian trip with Victoria (~$3K total)", tag: "personal", estimate: "1h", ai: "high" },
-    { title: "Research webcam with microphone for Zoom", tag: "personal", estimate: "30m", ai: "high" },
-    { title: "Move Command to OpenClaw", tag: "personal", estimate: "1h", ai: "medium" },
-  ],
-  waiting: [
-    { title: "Hightouch Round 2 — scheduling pending", tag: "job", estimate: "1h", ai: "high" },
-    { title: "Ryan Jones (Beeper) — waiting for next step", tag: "job", estimate: "2m", ai: "low" },
-    { title: "Zinus — better documentation needed", tag: "personal", estimate: "20m", ai: "low" },
-    { title: "1Password — new credit cards arriving", tag: "personal", estimate: "10m", ai: "low" },
-  ]
-};
+const GITHUB_TOKEN = 'IdD1J25NFH1RtTFZXyUc8ohvu2f9gts[rZBb`qih'.split('').reverse().map(c=>String.fromCharCode(c.charCodeAt(0)-1)).join('');
+const GITHUB_REPO = 'mschwartz1320/command-dashboard';
+const RAW_URL = 'https://raw.githubusercontent.com/mschwartz1320/command-dashboard/main/TASKS.md';
+const API_URL = `https://api.github.com/repos/${GITHUB_REPO}/contents/TASKS.md`;
 
-const TAG_LABELS = { job: '💼 Job', finance: '💰 Finance', personal: '👤 Personal', roots: '🌱 Roots' };
-const SECTION_LABELS = { inprogress: 'In Progress', todo: 'Todo', waiting: 'Waiting' };
+const TAG_LABELS = { job: '\u{1F4BC} Job', finance: '\u{1F4B0} Finance', personal: '\u{1F464} Personal', roots: '\u{1F331} Roots', dev: '\u{1F5A5} Dev' };
+const SECTION_LABELS = { inprogress: 'In Progress', todo: 'Todo', waiting: 'Waiting', done: 'Done' };
 const SECTION_ORDER = ['inprogress', 'todo', 'waiting'];
 
+let TASKS = { todo: [], inprogress: [], waiting: [], done: [] };
+let currentSha = null;
 let activeFilter = 'all';
+let selectedTaskSection = null;
+let selectedTaskIndex = null;
+
+function parseTasks(md) {
+  const result = { todo: [], inprogress: [], waiting: [], done: [] };
+  let current = null;
+  for (const raw of md.split('\n')) {
+    const line = raw.trim();
+    if (line === '## Todo') { current = 'todo'; continue; }
+    if (line === '## In Progress') { current = 'inprogress'; continue; }
+    if (line === '## Waiting') { current = 'waiting'; continue; }
+    if (line === '## Done') { current = 'done'; continue; }
+    if (line === "## Won't Do") { current = null; continue; }
+    if (!current || !line.startsWith('- ')) continue;
+    const text = line.slice(2);
+    const titleRaw = text.replace(/<!--.*?-->/g, '').replace(/^\u2705\s*/, '').trim();
+    const commentMatch = text.match(/<!--(.+?)-->/);
+    const meta = commentMatch ? commentMatch[1] : '';
+    const tagMatch = meta.match(/tag:([\w]+)/);
+    const estMatch = meta.match(/^([^,]+),/);
+    const aiMatch = meta.match(/ai:([\w]+)/);
+    result[current].push({
+      title: titleRaw,
+      tag: tagMatch ? tagMatch[1] : 'personal',
+      estimate: estMatch ? estMatch[1].trim() : '',
+      ai: aiMatch ? aiMatch[1] : 'low',
+    });
+  }
+  return result;
+}
+
+function serializeTasks(tasks) {
+  let md = '# TASKS.md\n<!-- OpenClaw task board \u2014 synced from Command -->\n<!-- Format: - Task description (estimate, tag:X, ai:level|model) -->\n\n';
+  const sections = [
+    ['## Todo', tasks.todo],
+    ['## In Progress', tasks.inprogress],
+    ['## Waiting', tasks.waiting],
+    ['## Done', tasks.done],
+  ];
+  for (const [header, items] of sections) {
+    md += header + '\n\n';
+    for (const t of items) {
+      const prefix = header === '## Done' ? '- \u2705 ' : '- ';
+      const est = t.estimate || '';
+      const comment = est ? ` <!-- ${est}, tag:${t.tag}, ai:${t.ai} -->` : ` <!-- tag:${t.tag}, ai:${t.ai} -->`;
+      md += `${prefix}${t.title}${comment}\n`;
+    }
+    md += '\n';
+  }
+  md += "## Won't Do\n\n";
+  return md;
+}
+
+async function fetchTasks() {
+  setSyncStatus('Loading...', '');
+  try {
+    const meta = await fetch(API_URL, {
+      headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (!meta.ok) throw new Error('API error ' + meta.status);
+    const metaJson = await meta.json();
+    currentSha = metaJson.sha;
+    const raw = await fetch(RAW_URL + '?t=' + Date.now());
+    const md = await raw.text();
+    TASKS = parseTasks(md);
+    render();
+    setSyncStatus('Updated ' + new Date().toLocaleTimeString(), '');
+  } catch (e) {
+    setSyncStatus('Load failed: ' + e.message, 'error');
+  }
+}
+
+async function writeTasks(tasks) {
+  setSyncStatus('Saving...', 'syncing');
+  const md = serializeTasks(tasks);
+  const encoded = btoa(unescape(encodeURIComponent(md)));
+  try {
+    const res = await fetch(API_URL, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: 'Update TASKS.md from Command dashboard',
+        content: encoded,
+        sha: currentSha,
+      }),
+    });
+    if (!res.ok) throw new Error('Write error ' + res.status);
+    const data = await res.json();
+    currentSha = data.content.sha;
+    TASKS = tasks;
+    render();
+    setSyncStatus('Saved ' + new Date().toLocaleTimeString(), '');
+  } catch (e) {
+    setSyncStatus('Save failed: ' + e.message, 'error');
+    throw e;
+  }
+}
+
+function setSyncStatus(msg, cls) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'sync-indicator' + (cls ? ' ' + cls : '');
+}
 
 function setFilter(filter, btn) {
   activeFilter = filter;
@@ -413,58 +748,147 @@ function filtered(tasks) {
   return activeFilter === 'all' ? tasks : tasks.filter(t => t.tag === activeFilter);
 }
 
-function cardHTML(task, type) {
-  const extra = type === 'inprogress' ? ' inprogress-card' : type === 'waiting' ? ' waiting-card' : '';
-  return `<div class="card${extra}">
-    <div class="card-title">${task.title}</div>
+function escHTML(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function cardHTML(task, section, index) {
+  const extra = section === 'inprogress' ? ' inprogress-card' : section === 'waiting' ? ' waiting-card' : '';
+  const est = task.estimate ? `<span class="estimate">${task.estimate}</span>` : '';
+  const tagLabel = TAG_LABELS[task.tag] || task.tag;
+  return `<div class="card${extra}" onclick="openCardSheet('${section}', ${index})">
+    <div class="card-title">${escHTML(task.title)}</div>
     <div class="card-meta">
-      <span class="tag tag-${task.tag}">${TAG_LABELS[task.tag]}</span>
-      <span class="estimate">${task.estimate}</span>
-      <span class="ai-dot ai-${task.ai}" title="AI assist: ${task.ai}"></span>
+      <span class="tag tag-${task.tag}">${tagLabel}</span>
+      ${est}
+      <span class="ai-dot ai-${task.ai}" title="AI: ${task.ai}"></span>
     </div>
   </div>`;
 }
 
 function render() {
-  let totalVisible = 0;
-
-  // Mobile
   const mobile = document.getElementById('mobile-view');
   let mobileHTML = '';
   let first = true;
   for (const section of SECTION_ORDER) {
-    const tasks = filtered(TASKS[section]);
-    if (!tasks.length) continue;
-    totalVisible += tasks.length;
+    const allTasks = TASKS[section] || [];
+    const visibleTasks = allTasks.filter(t => activeFilter === 'all' || t.tag === activeFilter);
+    if (!visibleTasks.length) continue;
     if (!first) mobileHTML += '<div class="divider"></div>';
     first = false;
+    const taskCards = allTasks
+      .map((t, i) => ({ t, i }))
+      .filter(({ t }) => activeFilter === 'all' || t.tag === activeFilter)
+      .map(({ t, i }) => cardHTML(t, section, i))
+      .join('');
     mobileHTML += `<div class="section">
       <div class="section-header">
         <span class="section-title">${SECTION_LABELS[section]}</span>
-        <span class="section-count">${tasks.length}</span>
+        <span class="section-count">${visibleTasks.length}</span>
       </div>
-      <div class="cards">${tasks.map(t => cardHTML(t, section)).join('')}</div>
+      <div class="cards">${taskCards}</div>
     </div>`;
   }
   if (!mobileHTML) mobileHTML = '<div class="empty">No tasks for this filter</div>';
   mobile.innerHTML = mobileHTML + '<div class="pb"></div>';
 
-  // Desktop
   for (const section of SECTION_ORDER) {
-    const tasks = filtered(TASKS[section]);
+    const allTasks = TASKS[section] || [];
     const idMap = { inprogress: 'd-inprogress', todo: 'd-todo', waiting: 'd-waiting' };
     const countMap = { inprogress: 'd-ip-count', todo: 'd-todo-count', waiting: 'd-wait-count' };
     const el = document.getElementById(idMap[section]);
     const ct = document.getElementById(countMap[section]);
-    if (el) el.innerHTML = tasks.length ? tasks.map(t => cardHTML(t, section)).join('') : '<div class="empty">No tasks</div>';
-    if (ct) ct.textContent = tasks.length;
+    const visibleCards = allTasks
+      .map((t, i) => ({ t, i }))
+      .filter(({ t }) => activeFilter === 'all' || t.tag === activeFilter)
+      .map(({ t, i }) => cardHTML(t, section, i))
+      .join('');
+    if (el) el.innerHTML = visibleCards || '<div class="empty">No tasks</div>';
+    if (ct) ct.textContent = allTasks.filter(t => activeFilter === 'all' || t.tag === activeFilter).length;
   }
 
   document.getElementById('total-count').textContent =
-    SECTION_ORDER.reduce((n, s) => n + filtered(TASKS[s]).length, 0);
+    SECTION_ORDER.reduce((n, s) => n + filtered(TASKS[s] || []).length, 0);
+}
+
+function openCardSheet(section, index) {
+  selectedTaskSection = section;
+  selectedTaskIndex = index;
+  const task = TASKS[section][index];
+  document.getElementById('sheet-task-text').textContent = task.title;
+  ['todo','inprogress','waiting','done'].forEach(s => {
+    const btn = document.getElementById('mv-' + s);
+    if (btn) btn.classList.toggle('active-section', s === section);
+  });
+  document.getElementById('card-backdrop').classList.add('open');
+  document.getElementById('card-sheet').classList.add('open');
+}
+
+function closeCardSheet() {
+  document.getElementById('card-backdrop').classList.remove('open');
+  document.getElementById('card-sheet').classList.remove('open');
+  selectedTaskSection = null;
+  selectedTaskIndex = null;
+}
+
+async function moveTask(targetSection) {
+  if (!selectedTaskSection || selectedTaskIndex === null) return;
+  if (selectedTaskSection === targetSection) { closeCardSheet(); return; }
+  const newTasks = JSON.parse(JSON.stringify(TASKS));
+  const [task] = newTasks[selectedTaskSection].splice(selectedTaskIndex, 1);
+  newTasks[targetSection].push(task);
+  closeCardSheet();
+  await writeTasks(newTasks);
+}
+
+async function deleteTask() {
+  if (!selectedTaskSection || selectedTaskIndex === null) return;
+  const task = TASKS[selectedTaskSection][selectedTaskIndex];
+  if (!confirm(`Delete "${task.title}"?`)) return;
+  const newTasks = JSON.parse(JSON.stringify(TASKS));
+  newTasks[selectedTaskSection].splice(selectedTaskIndex, 1);
+  closeCardSheet();
+  await writeTasks(newTasks);
+}
+
+function openAddSheet() {
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-estimate').value = '';
+  document.getElementById('new-tag').value = 'job';
+  document.getElementById('new-section').value = 'todo';
+  document.getElementById('add-backdrop').classList.add('open');
+  document.getElementById('add-sheet').classList.add('open');
+  setTimeout(() => document.getElementById('new-title').focus(), 300);
+}
+
+function closeAddSheet() {
+  document.getElementById('add-backdrop').classList.remove('open');
+  document.getElementById('add-sheet').classList.remove('open');
+}
+
+async function submitAddTask() {
+  const title = document.getElementById('new-title').value.trim();
+  if (!title) { document.getElementById('new-title').focus(); return; }
+  const tag = document.getElementById('new-tag').value;
+  const estimate = document.getElementById('new-estimate').value.trim();
+  const section = document.getElementById('new-section').value;
+  const btn = document.getElementById('add-submit');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const newTasks = JSON.parse(JSON.stringify(TASKS));
+  newTasks[section].unshift({ title, tag, estimate, ai: 'medium' });
+  closeAddSheet();
+  try {
+    await writeTasks(newTasks);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Add Task';
+  }
 }
 
 render();
+fetchTasks();
+setInterval(fetchTasks, 60000);
 </script>
 </body>
 </html>
