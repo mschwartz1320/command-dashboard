@@ -7,7 +7,6 @@
 - Collect uncle's bar repayment ($3,200) and send travel receipts — Misfit Club charge on Chase 6129, Mar 10. Fund Roots options exercise. <!-- tag:, ai:low -->
 - Decide on Capital One 0% APR expiring May 18 — Quicksilver card (ending 7359). Weigh against Roots options $2,181, San Sebastian ~$3K. <!-- tag:, ai:low -->
 - Exercise Roots stock options — 2,833 shares. Deadline Jul 2 2026. $2,181.44 total. Sign Exhibits A & B, email Jillian (jillian.minch@roots.ai) + Chaz, mail check to 88 Pine St 18th Fl NYC. <!-- tag:, ai:low -->
-- Return MOSCOT sunglasses — $402.84 charge Apr 15. Return within policy window. <!-- tag:, ai:low -->
 - Cancel Google Play subscription — Charged again Apr 8. Cancel after porting photos. <!-- tag:, ai:low -->
 - Book San Sebastian trip with Victoria — Flights (~$1,200-2,000 for two), cheap lodging, big food budget. ~$3K total. Fund from CRWD sale. <!-- tag:, ai:low -->
 - Research webcam w/ microphone — For zoom calls. <!-- tag:, ai:low -->
@@ -91,6 +90,7 @@
 - ✅ Contact Zinus support <!-- tag:, ai:low -->
 - ✅ Capital One Venture X annual fee decision <!-- tag:, ai:low -->
 - ✅ Set up Obsidian vault on Mac <!-- tag:, ai:low -->
+- ✅ Return MOSCOT sunglasses — $402.84 charge Apr 15. Return within policy window. <!-- tag:, ai:low -->
 
 ## Won't Do
 
