@@ -238,6 +238,7 @@
     <button class="filter-btn" onclick="setFilter('finance', this)">💰 Finance</button>
     <button class="filter-btn" onclick="setFilter('personal', this)">👤 Personal</button>
     <button class="filter-btn" onclick="setFilter('roots', this)">🌱 Roots</button>
+    <button class="filter-btn" onclick="setFilter('dev', this)">🖥 Dev</button>
   </div>
 </header>
 
@@ -382,6 +383,7 @@
         <option value="personal">👤 Personal</option><option value="roots">🌱 Roots</option><option value="dev">🖥 Dev</option>
       </select>
     </div>
+    <div class="form-group"><label class="form-label">Description (optional)</label><textarea class="form-input" id="new-desc" rows="2" placeholder="Add more context..." style="resize:vertical;"></textarea></div>
     <div class="form-group"><label class="form-label">Estimate (optional)</label><input class="form-input" id="new-estimate" type="text" placeholder="e.g. 30m, 2h"/></div>
     <div class="form-group"><label class="form-label">Section</label>
       <select class="form-select" id="new-section">
@@ -431,11 +433,6 @@ async function rawFetch(path) {
 }
 
 // ── MARKDOWN RENDERER (simple) ──
-function stripMd(s) {
-  if (!s) return '';
-  return s.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/`(.*?)`/g, '$1').replace(/_{1,2}(.*?)_{1,2}/g, '$1');
-}
-
 function stripMd(s) {
   if (!s) return '';
   return s.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/`(.*?)`/g, '$1').replace(/_{1,2}(.*?)_{1,2}/g, '$1');
@@ -505,10 +502,11 @@ function switchTab(tab, btn) {
   if (tab === 'tasks') {
     filters.style.display = '';
     fab.classList.remove('fab-hidden');
-    document.getElementById('filter-label').parentElement.style.display = '';
+    taskBadges.style.display = '';
   } else {
     filters.style.display = 'none';
     fab.classList.add('fab-hidden');
+    taskBadges.style.display = 'none';
   }
   // Lazy-load tabs on first open
   if (tab === 'memory' && !memoryLoaded) loadMemory();
@@ -518,7 +516,7 @@ function switchTab(tab, btn) {
 // ── TASKS CODE ──
 const TAG_LABELS = { job: '\u{1F4BC} Job', finance: '\u{1F4B0} Finance', personal: '\u{1F464} Personal', roots: '\u{1F331} Roots', dev: '\u{1F5A5} Dev' };
 const SECTION_LABELS = { inprogress: 'In Progress', todo: 'Todo', waiting: 'Waiting', done: 'Done' };
-const SECTION_ORDER = ['inprogress', 'todo', 'waiting'];
+const SECTION_ORDER = ['inprogress', 'todo', 'waiting', 'done'];
 let TASKS = { todo: [], inprogress: [], waiting: [], done: [] };
 let currentSha = null;
 let activeFilter = 'all';
@@ -623,16 +621,19 @@ function setFilter(filter, btn) {
   activeFilter = filter;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('filter-label').textContent = btn.textContent.replace(/^[^\w]+/, '').trim() || 'All';
+  const labels = { all: 'All', job: 'Job', finance: 'Finance', personal: 'Personal', roots: 'Roots', dev: 'Dev' };
+  document.getElementById('filter-label').textContent = labels[filter] || 'All';
   render();
 }
 
 function filtered(tasks) { return activeFilter === 'all' ? tasks : tasks.filter(t => t.tag === activeFilter); }
 function escHTML(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-let dragTaskId = null, dragFromSection = null;
-function dragStart(e, id, section) {
-  dragTaskId = id; dragFromSection = section;
+let dragTaskId = null, dragFromSection = null, dragFromIndex = null;
+function dragStart(e, section, index) {
+  dragFromSection = section;
+  dragFromIndex = index;
+  dragTaskId = index;
   e.dataTransfer.effectAllowed = 'move';
   e.currentTarget.style.opacity = '0.5';
 }
@@ -642,8 +643,8 @@ function dropOn(e, toSection) {
   e.preventDefault();
   const col = e.currentTarget.closest('.column-cards') || e.currentTarget;
   col.style.background = '';
-  if (!dragTaskId || dragFromSection === toSection) return;
-  moveTask(dragTaskId, toSection);
+  if (!dragFromSection || dragFromSection === toSection) return;
+  moveTask(dragFromSection, dragFromIndex, toSection);
 }
 function toggleDoneCol() {
   const col = document.getElementById('done-col');
@@ -661,7 +662,7 @@ function cardHTML(task, section, index) {
   const est = task.estimate ? `<span class="estimate">${task.estimate}</span>` : '';
   const tagLabel = TAG_LABELS[task.tag] || task.tag;
   const desc = task.description ? `<div class="card-desc">${escHTML(stripMd(task.description))}</div>` : '';
-  return `<div class="card${extra}" draggable="true" ondragstart="dragStart(event, task.id, task.section)" onclick="openCardSheet('${section}', ${index})">
+  return `<div class="card${extra}" draggable="true" ondragstart="dragStart(event, '${section}', ${index})" onclick="openCardSheet('${section}', ${index})">
     <div class="card-title">${escHTML(stripMd(task.title))}</div>${desc}
     <div class="card-meta"><span class="tag tag-${task.tag}">${tagLabel}</span>${est}<span class="ai-dot ai-${task.ai}" title="AI: ${task.ai}"></span></div>
   </div>`;
@@ -675,11 +676,11 @@ function render() {
   let first = true;
   for (const section of SECTION_ORDER) {
     const allTasks = TASKS[section] || [];
-    const visibleTasks = allTasks.filter(t => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.desc||'').toLowerCase().includes(searchQuery)));
+    const visibleTasks = allTasks.filter(t => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.description||'').toLowerCase().includes(searchQuery)));
     if (!visibleTasks.length) continue;
     if (!first) mobileHTML += '<div class="divider"></div>';
     first = false;
-    const taskCards = allTasks.map((t, i) => ({t, i})).filter(({t}) => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.desc||'').toLowerCase().includes(searchQuery))).map(({t, i}) => cardHTML(t, section, i)).join('');
+    const taskCards = allTasks.map((t, i) => ({t, i})).filter(({t}) => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.description||'').toLowerCase().includes(searchQuery))).map(({t, i}) => cardHTML(t, section, i)).join('');
     mobileHTML += `<div class="section"><div class="section-header"><span class="section-title">${SECTION_LABELS[section]}</span><span class="section-count">${visibleTasks.length}</span></div><div class="cards">${taskCards}</div></div>`;
   }
   if (!mobileHTML) mobileHTML = '<div class="empty">No tasks for this filter</div>';
@@ -690,7 +691,7 @@ function render() {
     const countMap = { inprogress: 'd-ip-count', todo: 'd-todo-count', waiting: 'd-wait-count' };
     const el = document.getElementById(idMap[section]);
     const ct = document.getElementById(countMap[section]);
-    const visibleCards = allTasks.map((t, i) => ({t, i})).filter(({t}) => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.desc||'').toLowerCase().includes(searchQuery))).map(({t, i}) => cardHTML(t, section, i)).join('');
+    const visibleCards = allTasks.map((t, i) => ({t, i})).filter(({t}) => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.description||'').toLowerCase().includes(searchQuery))).map(({t, i}) => cardHTML(t, section, i)).join('');
     if (el) {
       el.innerHTML = visibleCards;
       const emptyEl = el.querySelector('.col-empty');
@@ -701,7 +702,7 @@ function render() {
   const doneEl = document.getElementById('d-done');
   const doneCountEl = document.getElementById('d-done-count');
   if (doneEl && TASKS.done) {
-    const doneCards = TASKS.done.map((t, i) => ({t, i})).filter(({t}) => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.desc||'').toLowerCase().includes(searchQuery))).map(({t, i}) => cardHTML(t, 'done', i)).join('');
+    const doneCards = TASKS.done.map((t, i) => ({t, i})).filter(({t}) => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.description||'').toLowerCase().includes(searchQuery))).map(({t, i}) => cardHTML(t, 'done', i)).join('');
     doneEl.innerHTML = doneCards || '<div class="col-empty" style="text-align:center;color:var(--muted);padding:32px 16px;font-size:13px">✅ Nothing done yet</div>';
     if (doneCountEl) doneCountEl.textContent = TASKS.done.filter(t => activeFilter === 'all' || t.tag === activeFilter).length;
   }
@@ -730,11 +731,15 @@ function closeCardSheet() {
   document.getElementById('card-sheet').classList.remove('open');
   selectedTaskSection = null; selectedTaskIndex = null;
 }
-async function moveTask(targetSection) {
-  if (!selectedTaskSection || selectedTaskIndex === null) return;
-  if (selectedTaskSection === targetSection) { closeCardSheet(); return; }
+async function moveTask(fromSection, fromIndex, targetSection) {
+  if (!fromSection && selectedTaskSection && selectedTaskIndex !== null) {
+    fromSection = selectedTaskSection;
+    fromIndex = selectedTaskIndex;
+  }
+  if (!fromSection || fromIndex === null || fromIndex === undefined) return;
+  if (fromSection === targetSection) { closeCardSheet(); return; }
   const newTasks = JSON.parse(JSON.stringify(TASKS));
-  const [task] = newTasks[selectedTaskSection].splice(selectedTaskIndex, 1);
+  const [task] = newTasks[fromSection].splice(fromIndex, 1);
   newTasks[targetSection].push(task);
   closeCardSheet();
   await writeTasks(newTasks);
@@ -749,7 +754,7 @@ async function deleteTask() {
   await writeTasks(newTasks);
 }
 function openAddSheet() {
-  document.getElementById('new-title').value = ''; document.getElementById('new-estimate').value = '';
+  document.getElementById('new-title').value = ''; document.getElementById('new-desc').value = ''; document.getElementById('new-estimate').value = '';
   document.getElementById('new-tag').value = 'job'; document.getElementById('new-section').value = 'todo';
   document.getElementById('add-backdrop').classList.add('open'); document.getElementById('add-sheet').classList.add('open');
   setTimeout(() => document.getElementById('new-title').focus(), 300);
@@ -758,12 +763,13 @@ function closeAddSheet() { document.getElementById('add-backdrop').classList.rem
 async function submitAddTask() {
   const title = document.getElementById('new-title').value.trim();
   if (!title) { document.getElementById('new-title').focus(); return; }
+  const description = document.getElementById('new-desc').value.trim();
   const tag = document.getElementById('new-tag').value;
   const estimate = document.getElementById('new-estimate').value.trim();
   const section = document.getElementById('new-section').value;
   const btn = document.getElementById('add-submit'); btn.disabled = true; btn.textContent = 'Saving...';
   const newTasks = JSON.parse(JSON.stringify(TASKS));
-  newTasks[section].unshift({ title, tag, estimate, ai: 'medium', description: '' });
+  newTasks[section].unshift({ title, description, tag, estimate, ai: 'medium' });
   closeAddSheet();
   try { await writeTasks(newTasks); } finally { btn.disabled = false; btn.textContent = 'Add Task'; }
 }
@@ -1028,13 +1034,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 function openNewTaskForm() {
-  document.getElementById('sheet-title').textContent = 'New Task';
-  document.getElementById('task-title-input').value = '';
-  document.getElementById('task-desc-input').value = '';
-  document.getElementById('task-section-select').value = 'todo';
-  document.getElementById('task-tag-select').value = '';
-  currentEditTask = null;
-  openSheet('new');
+  openAddSheet();
 }
 
 // ── INIT ──
