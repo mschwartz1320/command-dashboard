@@ -68,8 +68,8 @@
     .tag-roots { color: var(--roots); background: var(--roots-bg); }
     .tag-dev { color: var(--dev); background: var(--dev-bg); }
     .estimate { font-size: 11px; color: var(--muted); background: var(--bg2); padding: 2px 7px; border-radius: 10px; }
-    .ai-dot { width: 8px; height: 8px; border-radius: 50%; margin-left: auto; flex-shrink: 0; display: inline-block; }
-    .ai-high { background: #D97757; } .ai-medium { background: #f59e0b; } .ai-low { background: #94a3b8; }
+    .card-desc { font-size: 12px; color: var(--text2); line-height: 1.4; margin-bottom: 8px; }
+    .show-more { color: var(--accent); cursor: pointer; font-weight: 500; }
     .inprogress-card { border-left: 3px solid var(--inprogress-bar); }
     .waiting-card { border-left: 3px solid var(--waiting-bar); }
     .divider { height: 1px; background: var(--border); margin: 14px 16px 0; }
@@ -538,17 +538,17 @@ function parseTasks(md) {
     if (!current || !line.startsWith('- ')) continue;
     const text = line.slice(2);
     const titleRaw = text.replace(/&lt;!--.*?--&gt;/g, '').replace(/<!--.*?-->/g, '').replace(/^\u2705\s*/, '').trim();
-    const commentMatch = text.match(/<!--(.+?)-->/);
-    const meta = commentMatch ? commentMatch[1] : '';
+    const allComments = [...text.matchAll(/<!--(.+?)-->/g)].map(m => m[1]).join(' ');
+    const meta = allComments;
     const tagMatch = meta.match(/tag:([\w]+)/);
-    const estMatch = meta.match(/^([^,]+),/);
+    const estMatch = meta.match(/estimate:(\S+)/);
     const aiMatch = meta.match(/ai:([\w]+)/);
     let description = '';
     if (li + 1 < lines.length && lines[li + 1].startsWith('  - ')) {
       description = lines[li + 1].slice(4).trim();
       li++;
     }
-    result[current].push({ title: titleRaw, tag: tagMatch ? tagMatch[1] : '', estimate: estMatch ? estMatch[1].trim() : '', ai: aiMatch ? aiMatch[1] : 'low', description });
+    result[current].push({ title: titleRaw, tag: tagMatch ? tagMatch[1] : '', estimate: estMatch ? estMatch[1].trim() : '', ai: aiMatch ? aiMatch[1] : 'low', description, raw: text });
   }
   return result;
 }
@@ -561,8 +561,9 @@ function serializeTasks(tasks) {
     for (const t of items) {
       const prefix = header === '## Done' ? '- \u2705 ' : '- ';
       const est = t.estimate || '';
-      const comment = est ? ` <!-- ${est}, tag:${t.tag}, ai:${t.ai} -->` : ` <!-- tag:${t.tag}, ai:${t.ai} -->`;
-      md += `${prefix}${stripMd(t.title)}${comment}\n`;
+      const comment = est ? ` <!-- estimate:${est} --> <!-- tag:${t.tag} --> <!-- ai:${t.ai} -->` : ` <!-- tag:${t.tag} --> <!-- ai:${t.ai} -->`;
+      const titleStr = t.title.startsWith('✅') ? t.title : stripMd(t.title);
+      md += `${prefix}**${titleStr}**${comment}\n`;
       if (t.description) md += `  - ${t.description}\n`;
     }
     md += '\n';
@@ -657,14 +658,29 @@ function toggleDoneCol() {
   btn.textContent = showing ? '📦 Show Done' : '📦 Hide Done';
 }
 
+function urgencyEmoji(task) {
+  const t = (task.title + ' ' + (task.description||'')).toLowerCase();
+  if (/\btoday\b/.test(t)) return '🔴 ';
+  if (/\btomorrow\b|\bdue\b/.test(t)) return '🟡 ';
+  return '';
+}
 function cardHTML(task, section, index) {
   const extra = section === 'inprogress' ? ' inprogress-card' : section === 'waiting' ? ' waiting-card' : '';
   const est = task.estimate ? `<span class="estimate">${task.estimate}</span>` : '';
   const tagLabel = TAG_LABELS[task.tag] || task.tag;
-  const desc = task.description ? `<div class="card-desc">${escHTML(stripMd(task.description))}</div>` : '';
+  const tagEl = task.tag ? `<span class="tag tag-${task.tag}">${tagLabel}</span>` : '';
+  const urgency = urgencyEmoji(task);
+  let descEl = '';
+  if (task.description) {
+    const short = escHTML(stripMd(task.description)).slice(0, 120);
+    const full = escHTML(stripMd(task.description));
+    const hasMore = full.length > 120;
+    descEl = `<div class="card-desc">${short}${hasMore ? `<span class="show-more" onclick="event.stopPropagation();this.previousSibling.nodeValue=this.parentNode.dataset.full;this.remove()"> show more</span>` : ''}</div>`;
+    if (hasMore) descEl = `<div class="card-desc" data-full="${full}">${short}<span class="show-more" onclick="event.stopPropagation();this.parentNode.textContent=this.parentNode.dataset.full"> show more</span></div>`;
+  }
   return `<div class="card${extra}" draggable="true" ondragstart="dragStart(event, '${section}', ${index})" onclick="openCardSheet('${section}', ${index})">
-    <div class="card-title">${escHTML(stripMd(task.title))}</div>${desc}
-    <div class="card-meta"><span class="tag tag-${task.tag}">${tagLabel}</span>${est}<span class="ai-dot ai-${task.ai}" title="AI: ${task.ai}"></span></div>
+    <div class="card-title">${urgency}${escHTML(stripMd(task.title))}</div>${descEl}
+    <div class="card-meta">${tagEl}${est}</div>
   </div>`;
 }
 
