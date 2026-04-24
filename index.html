@@ -516,7 +516,7 @@ function switchTab(tab, btn) {
 // ── TASKS CODE ──
 const TAG_LABELS = { job: '\u{1F4BC} Job', finance: '\u{1F4B0} Finance', personal: '\u{1F464} Personal', roots: '\u{1F331} Roots', dev: '\u{1F5A5} Dev' };
 const SECTION_LABELS = { inprogress: 'In Progress', todo: 'Todo', waiting: 'Waiting', done: 'Done' };
-const SECTION_ORDER = ['inprogress', 'todo', 'waiting', 'done'];
+const SECTION_ORDER = ['todo', 'inprogress', 'waiting', 'done'];
 let TASKS = { todo: [], inprogress: [], waiting: [], done: [] };
 let currentSha = null;
 let activeFilter = 'all';
@@ -669,6 +669,9 @@ function cardHTML(task, section, index) {
   const est = task.estimate ? `<span class="estimate">${task.estimate}</span>` : '';
   const tagLabel = TAG_LABELS[task.tag] || task.tag;
   const tagEl = task.tag ? `<span class="tag tag-${task.tag}">${tagLabel}</span>` : '';
+  const AI_ICONS = { high: '🤖', medium: '⚡', low: '' };
+  const aiIcon = AI_ICONS[task.ai] || '';
+  const aiEl = task.ai && task.ai !== 'low' ? `<span class="estimate" title="AI: ${task.ai}">${aiIcon} ${task.ai}</span>` : '';
   const urgency = urgencyEmoji(task);
   let descEl = '';
   if (task.description) {
@@ -680,7 +683,7 @@ function cardHTML(task, section, index) {
   }
   return `<div class="card${extra}" draggable="true" ondragstart="dragStart(event, '${section}', ${index})" onclick="openCardSheet('${section}', ${index})">
     <div class="card-title">${urgency}${escHTML(stripMd(task.title))}</div>${descEl}
-    <div class="card-meta">${tagEl}${est}</div>
+    <div class="card-meta">${tagEl}${aiEl}${est}</div>
   </div>`;
 }
 
@@ -1060,3 +1063,4 @@ setInterval(fetchTasks, 60000);
 </script>
 </body>
 </html>
+
