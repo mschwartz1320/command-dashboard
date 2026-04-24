@@ -1,0 +1,13 @@
+{
+  "name": "command-dashboard-qa",
+  "version": "1.0.0",
+  "description": "Playwright QA tests for command-dashboard",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}
