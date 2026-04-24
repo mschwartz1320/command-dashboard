@@ -26,7 +26,6 @@
   - For zoom calls.
 - **Use JobSpy MCP to find and apply to new jobs** <!-- estimate:1h --> <!-- tag:job --> <!-- ai:high -->
 - **Figure out new insurance for after April** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
-- **Figure out Capital One car situation** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:low -->
 
 ## In Progress
 
