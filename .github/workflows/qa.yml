@@ -11,7 +11,7 @@ jobs:
   qa:
     name: Playwright Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
 
     steps:
       - name: Checkout repo
