@@ -24,8 +24,6 @@
   - Flights (~$1,200-2,000 for two), cheap lodging, big food budget. ~$3K total. Fund from CRWD sale.
 - **Research webcam w/ microphone** <!-- estimate:30m --> <!-- tag:personal --> <!-- ai:high -->
   - For zoom calls.
-- **Call dad to sign in to Amazon account** <!-- estimate:15m --> <!-- tag:personal --> <!-- ai:low -->
-  - Order eye stuff for Victoria, razor blades, multi vitamins.
 - **Use JobSpy MCP to find and apply to new jobs** <!-- estimate:1h --> <!-- tag:job --> <!-- ai:high -->
 - **Figure out new insurance for after April** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
 - **Set up weekly unemployment claim automation** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
@@ -133,6 +131,8 @@
 - ✅ **Contact Zinus support** <!-- tag: --> <!-- ai:low -->
 - ✅ **Capital One Venture X annual fee decision** <!-- tag: --> <!-- ai:low -->
 - ✅ **Set up Obsidian vault on Mac** <!-- tag: --> <!-- ai:low -->
+- ✅ **Call dad to sign in to Amazon account** <!-- estimate:15m --> <!-- tag:personal --> <!-- ai:low -->
+  - Order eye stuff for Victoria, razor blades, multi vitamins.
 
 ## Won't Do
 
