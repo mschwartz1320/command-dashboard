@@ -75,7 +75,7 @@
     .divider { height: 1px; background: var(--border); margin: 14px 16px 0; }
     .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 32px 0; }
     .pb { padding-bottom: 100px; }
-    .card-desc { font-size: 12px; color: var(--text2); margin-top: 4px; margin-bottom: 4px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
+
 
     /* FAB */
     .fab { position: fixed; bottom: 24px; right: 20px; z-index: 200; width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: white; border: none; font-size: 26px; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(217,119,87,0.45); transition: background 0.15s, transform 0.1s; -webkit-tap-highlight-color: transparent; }
@@ -548,7 +548,15 @@ function parseTasks(md) {
       description = lines[li + 1].slice(4).trim();
       li++;
     }
-    result[current].push({ title: titleRaw, tag: tagMatch ? tagMatch[1] : '', estimate: estMatch ? estMatch[1].trim() : '', ai: aiMatch ? aiMatch[1] : 'low', description, raw: text });
+    // Split inline description from title on ' — ' if no sub-item description
+    let finalTitle = titleRaw;
+    let finalDesc = description;
+    if (!finalDesc && titleRaw.includes(' — ')) {
+      const parts = titleRaw.split(' — ');
+      finalTitle = parts[0].trim();
+      finalDesc = parts.slice(1).join(' — ').trim();
+    }
+    result[current].push({ title: finalTitle, tag: tagMatch ? tagMatch[1] : '', estimate: estMatch ? estMatch[1].trim() : '', ai: aiMatch ? aiMatch[1] : 'low', description: finalDesc, raw: text });
   }
   return result;
 }
@@ -637,6 +645,10 @@ function dragStart(e, section, index) {
   dragTaskId = index;
   e.dataTransfer.effectAllowed = 'move';
   e.currentTarget.style.opacity = '0.5';
+  e.currentTarget.addEventListener('dragend', function onEnd() {
+    e.currentTarget.style.opacity = '';
+    e.currentTarget.removeEventListener('dragend', onEnd);
+  });
 }
 function allowDrop(e) { e.preventDefault(); e.currentTarget.closest('.column-cards').style.background='var(--border)'; }
 function dragLeave(e) { e.currentTarget.closest('.column')?.querySelector('.column-cards')?.style && (e.currentTarget.closest('.column').querySelector('.column-cards').style.background=''); }
@@ -750,16 +762,25 @@ function closeCardSheet() {
   document.getElementById('card-sheet').classList.remove('open');
   selectedTaskSection = null; selectedTaskIndex = null;
 }
-async function moveTask(fromSection, fromIndex, targetSection) {
-  if (!fromSection && selectedTaskSection && selectedTaskIndex !== null) {
+// moveTask: called from drag-drop (3 args) or from sheet button (1 arg = target)
+async function moveTask(fromOrTarget, fromIndex, targetSection) {
+  let fromSection, toSection, idx;
+  if (targetSection === undefined) {
+    // Called from sheet button: moveTask('done') — use selected task
+    toSection = fromOrTarget;
     fromSection = selectedTaskSection;
-    fromIndex = selectedTaskIndex;
+    idx = selectedTaskIndex;
+  } else {
+    // Called from drag-drop: moveTask(fromSection, fromIndex, toSection)
+    fromSection = fromOrTarget;
+    idx = fromIndex;
+    toSection = targetSection;
   }
-  if (!fromSection || fromIndex === null || fromIndex === undefined) return;
-  if (fromSection === targetSection) { closeCardSheet(); return; }
+  if (!fromSection || idx === null || idx === undefined) return;
+  if (fromSection === toSection) { closeCardSheet(); return; }
   const newTasks = JSON.parse(JSON.stringify(TASKS));
-  const [task] = newTasks[fromSection].splice(fromIndex, 1);
-  newTasks[targetSection].push(task);
+  const [task] = newTasks[fromSection].splice(idx, 1);
+  newTasks[toSection].push(task);
   closeCardSheet();
   await writeTasks(newTasks);
 }
