@@ -26,8 +26,6 @@
   - For zoom calls.
 - **Use JobSpy MCP to find and apply to new jobs** <!-- estimate:1h --> <!-- tag:job --> <!-- ai:high -->
 - **Figure out new insurance for after April** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
-- **Set up weekly unemployment claim automation** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
-  - Automate via OpenClaw or add recurring reminder to task board each week.
 - **Figure out Capital One car situation** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:low -->
 - **Schedule Red Ventures recruiter call** <!-- estimate:5m --> <!-- tag:job --> <!-- ai:low -->
   - Already accepted Tue Apr 28 1pm with Lauren Hasell. Confirm prep needed.
@@ -133,6 +131,8 @@
 - ✅ **Set up Obsidian vault on Mac** <!-- tag: --> <!-- ai:low -->
 - ✅ **Call dad to sign in to Amazon account** <!-- estimate:15m --> <!-- tag:personal --> <!-- ai:low -->
   - Order eye stuff for Victoria, razor blades, multi vitamins.
+- ✅ **Set up weekly unemployment claim automation** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
+  - Automate via OpenClaw or add recurring reminder to task board each week.
 
 ## Won't Do
 
