@@ -4,7 +4,7 @@ const { waitForTasksLoaded, goToTasksTab } = require('./helpers');
 test.describe('Filter and search', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await goToTasksTab(page);
     await waitForTasksLoaded(page);
   });
