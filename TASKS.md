@@ -4,8 +4,6 @@
 
 ## Todo
 
-- **🚨 Provide Gorgias references** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
-  - ASAP** — Gerard asked for 2 references (1 manager, 1 peer/co-worker): name, email, working relationship. This is the LAST step before offer.
 - **🚨 Prep for Gorgias Mon Apr 27 interviews** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
   - PACKED DAY: 10:30am physical, 11:30am Datadog, 1pm Case Study Review (Lenaïg, Chris, Yegor), 4:15pm Kira SPM, 5pm Leadership Call w/ Maxime Pruvost CEO (updated from 3pm). Research Maxime + interviewers deeply.
 - **Reply to Zinus** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
@@ -50,6 +48,8 @@
   - There is a pinned cowork session.
 - **🚨 Spend FSA balance** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
   - DUE Apr 30** — $660 remaining. 5 days left. Buy frames at local store, get lenses at Costco.
+- **🚨 Provide Gorgias references** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
+  - ASAP** — Gerard asked for 2 references (1 manager, 1 peer/co-worker): name, email, working relationship. This is the LAST step before offer.
 
 ## Waiting
 
