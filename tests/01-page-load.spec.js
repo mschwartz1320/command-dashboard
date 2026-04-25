@@ -4,7 +4,7 @@ const { waitForTasksLoaded } = require('./helpers');
 test.describe('Page load and navigation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
   });
 
   test('page title is Command', async ({ page }) => {
