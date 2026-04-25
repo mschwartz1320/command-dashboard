@@ -6,7 +6,7 @@ const QA_PREFIX = '[QA-TEST]';
 test.describe('Move task via card sheet', () => {
   test('create task, move to In Progress via move button, then delete', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await goToTasksTab(page);
     await waitForTasksLoaded(page);
 
@@ -21,7 +21,7 @@ test.describe('Move task via card sheet', () => {
     await page.waitForTimeout(3000);
 
     await page.reload();
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await goToTasksTab(page);
     await waitForTasksLoaded(page);
 
@@ -47,7 +47,7 @@ test.describe('Move task via card sheet', () => {
 
         // Reload and verify card still exists (in In Progress)
         await page.reload();
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
+        await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
         await goToTasksTab(page);
         await waitForTasksLoaded(page);
         await expect(page.locator('.card-title', { hasText: title })).toBeVisible({ timeout: 15000 });
@@ -56,7 +56,7 @@ test.describe('Move task via card sheet', () => {
 
     // Cleanup
     await page.reload();
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await goToTasksTab(page);
     await waitForTasksLoaded(page);
 
@@ -72,7 +72,7 @@ test.describe('Move task via card sheet', () => {
 
   test('move task to Done via move button', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await goToTasksTab(page);
     await waitForTasksLoaded(page);
 
@@ -86,7 +86,7 @@ test.describe('Move task via card sheet', () => {
     await page.waitForTimeout(3000);
 
     await page.reload();
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await goToTasksTab(page);
     await waitForTasksLoaded(page);
 
@@ -107,7 +107,7 @@ test.describe('Move task via card sheet', () => {
 
     // Cleanup — find and delete (Done may be hidden)
     await page.reload();
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await goToTasksTab(page);
     await waitForTasksLoaded(page);
 
