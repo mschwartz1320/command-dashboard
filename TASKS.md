@@ -4,6 +4,7 @@
 
 ## Todo
 
+- **Send Jarret and Ray reference material** <!-- tag:personal --> <!-- ai:medium -->
 - **🚨 Prep for Gorgias Mon Apr 27 interviews** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
   - PACKED DAY: 10:30am physical, 11:30am Datadog, 1pm Case Study Review (Lenaïg, Chris, Yegor), 4:15pm Kira SPM, 5pm Leadership Call w/ Maxime Pruvost CEO (updated from 3pm). Research Maxime + interviewers deeply.
 - **Reply to Zinus** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
