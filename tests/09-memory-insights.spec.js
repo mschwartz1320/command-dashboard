@@ -4,7 +4,7 @@ const { goToMemoryTab, goToInsightsTab } = require('./helpers');
 test.describe('Memory tab', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
   });
 
   test('Memory tab loads and shows sub-tabs or content', async ({ page }) => {
@@ -64,7 +64,7 @@ test.describe('Memory tab', () => {
 test.describe('Insights tab', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
   });
 
   test('Insights tab loads and shows content list', async ({ page }) => {
