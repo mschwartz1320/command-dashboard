@@ -6,7 +6,7 @@ test.describe('Responsive layout — Desktop (1280px)', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await waitForTasksLoaded(page);
   });
 
@@ -61,7 +61,7 @@ test.describe('Responsive layout — Mobile (375px)', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
     await waitForTasksLoaded(page);
   });
 
