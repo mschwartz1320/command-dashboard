@@ -1,6 +1,6 @@
 # MEMORY.md - Long-Term Memory
 
-_Last updated: 2026-04-20_
+_Last updated: 2026-04-25_
 
 ## The Human
 
@@ -95,8 +95,9 @@ Note: Prompt bodies not exported from Claude — need to write from scratch.
 
 ## Job Search
 - Active: Technical PM roles
-- Interviews this week: Gorgias, Junior AI
-- Pipeline location: unknown (was in `~/LocalLift/` or `~/Productivity/` — both DENIED in export)
+- References requested for Gorgias; reference check is the last step before offer.
+- Upcoming interviews: Gorgias Mon Apr 27 (1pm case study review, 3pm leadership call with Maxime Pruvost) and Alpine Tue Apr 28 screening with Juliette Callam.
+- Other active pipeline: Justworks, LangChain, Millennium follow-up, Hightouch, Rogo/Profound, Red Ventures.
 - Resume: `~/Documents/Claude/Projects/Job search/Matthew_Schwartz_Resume_Updated.docx`
 
 ## People
@@ -105,7 +106,7 @@ Note: Prompt bodies not exported from Claude — need to write from scratch.
 - **Dr. Epstein** — Psychologist/therapist, weekly sessions
 
 ## Mac Filesystem Rules
-- Documents → `~/Documents/{category}/` (Career/, Financial/, Legal/, Business/, Personal/, Archive/)
+- Documents → `~/Documents/{category}/`
 - Code → `~/Projects/`, loose scripts → `~/Projects/_scripts/`
 - Never dump in Downloads, Desktop, or home root
 
@@ -129,7 +130,7 @@ Full profile in `memory/writing-style.md`. Key summary:
 - Very short replies: 1–4 sentences for most professional email
 - Greeting: "Hi [First name]," always; never "I hope this email finds you well"
 - Sign-offs: "Best," (primary), "Cheers," (warmer), "— Matthew" (casual)
-- Signature: Matthew Schwartz / Product Manager | NYC / (818) 434-4327 | LinkedIn
+- Signature: Matthew Schwartz / Product Manager | NYC / (818) 434-4327 / LinkedIn
 - Plain everyday vocabulary; polite hedges ("would it be possible")
 - No exclamation points, emojis, buzzwords, or long preambles in emails
 - Replies get shorter as a thread progresses
