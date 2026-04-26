@@ -22,8 +22,6 @@
   - 2,833 shares. Deadline Jul 2 2026. $2,181.44 total. Sign Exhibits A & B, email Jillian (jillian.minch@roots.ai) + Chaz, mail check to 88 Pine St 18th Fl NYC.
 - **Cancel Google Play subscription** <!-- estimate:5m --> <!-- tag:personal --> <!-- ai:low -->
   - Charged again Apr 8. Cancel after porting photos.
-- **Book San Sebastian trip with Victoria** <!-- estimate:1h --> <!-- tag:personal --> <!-- ai:high -->
-  - Flights (~$1,200-2,000 for two), cheap lodging, big food budget. ~$3K total. Fund from CRWD sale.
 - **Research webcam w/ microphone** <!-- estimate:30m --> <!-- tag:personal --> <!-- ai:high -->
   - For zoom calls.
 - **Use JobSpy MCP to find and apply to new jobs** <!-- estimate:1h --> <!-- tag:job --> <!-- ai:high -->
