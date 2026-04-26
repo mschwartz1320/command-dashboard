@@ -77,6 +77,15 @@
     .pb { padding-bottom: 100px; }
 
 
+
+    /* MOBILE DONE SECTION */
+    .section-done-toggle { display: flex; align-items: center; gap: 8px; padding: 14px 16px 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .section-done-toggle .section-title { color: var(--muted); }
+    .section-done-toggle .toggle-arrow { font-size: 10px; color: var(--muted); transition: transform 0.2s; }
+    .section-done-toggle.expanded .toggle-arrow { transform: rotate(90deg); }
+    .section-done-cards { display: none; padding: 0 16px; }
+    .section-done-cards.expanded { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; }
+
     /* FAB */
     .fab { position: fixed; bottom: 24px; right: 20px; z-index: 200; width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: white; border: none; font-size: 26px; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(217,119,87,0.45); transition: background 0.15s, transform 0.1s; -webkit-tap-highlight-color: transparent; }
     .fab:active { transform: scale(0.93); } .fab:hover { background: var(--accent-hover); }
@@ -196,6 +205,8 @@
       /* Tab panels must fill remaining viewport height so columns can scroll */
       .tab-panel { display: none; }
       .tab-panel.active { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+      /* Memory + Insights panels scroll as a unit; tasks panel contains the kanban board */
+      .tab-panel.tab-full.active { overflow-y: auto; flex-direction: column; }
       .board { display: flex; gap: 20px; overflow-x: auto; overflow-y: hidden; padding: 20px 24px 24px; flex: 1; min-height: 0; align-items: stretch; }
       .column { background: var(--bg2); border-radius: 12px; min-width: 280px; flex: 1; display: flex; flex-direction: column; min-height: 0; flex-shrink: 0; }
       .column-header { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
@@ -218,6 +229,25 @@
       .insights-content { flex: 1; overflow-y: auto; padding: 20px; max-width: 760px; }
     }
     @media (min-width: 768px) { #done-toggle-wrap { display: flex !important; } }
+
+    /* INSIGHTS MOBILE — horizontal scroll list */
+    @media (max-width: 767px) {
+      .insights-layout { flex-direction: column; }
+      .insights-sidebar { padding: 12px 16px 0; border-right: none; border-bottom: 1px solid var(--border); overflow-x: auto; overflow-y: hidden; }
+      .insights-title { display: none; }
+      .insight-list { display: flex; flex-direction: row; gap: 6px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; padding-bottom: 10px; }
+      .insight-list::-webkit-scrollbar { display: none; }
+      .insight-list-item { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; margin-bottom: 0; }
+      .insights-content { padding: 16px; max-width: 100%; }
+    }
+
+    /* MEMORY OVERVIEW SUMMARY CARD */
+    .memory-summary-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+    .memory-summary-card h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 10px; }
+    .memory-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .memory-summary-item { background: var(--bg2); border-radius: 8px; padding: 8px 10px; }
+    .memory-summary-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 2px; }
+    .memory-summary-value { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; }
   </style>
 </head>
 <body>
@@ -694,11 +724,14 @@ function cardHTML(task, section, index) {
   const urgency = urgencyEmoji(task);
   let descEl = '';
   if (task.description) {
-    const short = escHTML(stripMd(task.description)).slice(0, 120);
     const full = escHTML(stripMd(task.description));
     const hasMore = full.length > 120;
-    descEl = `<div class="card-desc">${short}${hasMore ? `<span class="show-more" onclick="event.stopPropagation();this.previousSibling.nodeValue=this.parentNode.dataset.full;this.remove()"> show more</span>` : ''}</div>`;
-    if (hasMore) descEl = `<div class="card-desc" data-full="${full}">${short}<span class="show-more" onclick="event.stopPropagation();this.parentNode.textContent=this.parentNode.dataset.full"> show more</span></div>`;
+    const short = hasMore ? full.slice(0, 120) : full;
+    if (hasMore) {
+      descEl = `<div class="card-desc" data-full="${full.replace(/"/g,'&quot;')}">${short}<span class="show-more" onclick="event.stopPropagation();var p=this.parentNode;p.innerHTML=p.dataset.full"> show more</span></div>`;
+    } else {
+      descEl = `<div class="card-desc">${full}</div>`;
+    }
   }
   return `<div class="card${extra}" draggable="true" ondragstart="dragStart(event, '${section}', ${index})" onclick="openCardSheet('${section}', ${index})">
     <div class="card-title">${urgency}${escHTML(stripMd(task.title))}</div>${descEl}
@@ -713,6 +746,7 @@ function render() {
   let mobileHTML = '';
   let first = true;
   for (const section of SECTION_ORDER) {
+    if (section === 'done') continue; // done rendered separately below with toggle
     const allTasks = TASKS[section] || [];
     const visibleTasks = allTasks.filter(t => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.description||'').toLowerCase().includes(searchQuery)));
     if (!visibleTasks.length) continue;
@@ -720,6 +754,16 @@ function render() {
     first = false;
     const taskCards = allTasks.map((t, i) => ({t, i})).filter(({t}) => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.description||'').toLowerCase().includes(searchQuery))).map(({t, i}) => cardHTML(t, section, i)).join('');
     mobileHTML += `<div class="section"><div class="section-header"><span class="section-title">${SECTION_LABELS[section]}</span><span class="section-count">${visibleTasks.length}</span></div><div class="cards">${taskCards}</div></div>`;
+  }
+  // Add done section on mobile (collapsible)
+  const doneTasks = (TASKS.done || []).filter(t => (activeFilter === 'all' || t.tag === activeFilter) && (!searchQuery || (t.title||'').toLowerCase().includes(searchQuery) || (t.description||'').toLowerCase().includes(searchQuery)));
+  if (doneTasks.length) {
+    const doneCards = doneTasks.map((t, i) => {
+      const realIdx = (TASKS.done || []).indexOf(t);
+      return cardHTML(t, 'done', realIdx < 0 ? i : realIdx);
+    }).join('');
+    const expanded = document.getElementById('mobile-done-section')?.classList.contains('expanded') ? 'expanded' : '';
+    mobileHTML += `<div class="divider"></div><div class="section-done-toggle${expanded ? ' expanded' : ''}" id="mobile-done-toggle" onclick="toggleMobileDone()"><span class="section-title">Done</span><span class="section-count">${doneTasks.length}</span><span class="toggle-arrow">▶</span></div><div class="section-done-cards${expanded ? ' expanded' : ''}" id="mobile-done-section">${doneCards}</div>`;
   }
   if (!mobileHTML) mobileHTML = '<div class="empty">No tasks for this filter</div>';
   mobile.innerHTML = mobileHTML + '<div class="pb"></div>';
@@ -802,6 +846,14 @@ async function deleteTask() {
   await writeTasks(newTasks);
 }
 
+
+function toggleMobileDone() {
+  const toggle = document.getElementById('mobile-done-toggle');
+  const section = document.getElementById('mobile-done-section');
+  if (!toggle || !section) return;
+  toggle.classList.toggle('expanded');
+  section.classList.toggle('expanded');
+}
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -920,7 +972,23 @@ async function loadMemory() {
     } else {
       document.getElementById('overview-sync-meta').textContent = 'Sync status unavailable';
     }
-    document.getElementById('overview-content').innerHTML = renderMarkdown(overviewResult.content);
+    const memContent = overviewResult.content;
+    // Build summary card from key MEMORY.md fields
+    const nameMatch = memContent.match(/\*\*Name:\*\*\s*(.+)/);
+    const locationMatch = memContent.match(/\*\*Location:\*\*\s*(.+)/);
+    const roleMatch = memContent.match(/\*\*Role:\*\*\s*(.+)/);
+    const jobSearchMatch = memContent.match(/\*\*Active[^*]*\*\*\s*(.+)/);
+    const projectsMatch = [...memContent.matchAll(/^###\s+(.+)/gm)].map(m => m[1]);
+    const summaryCard = `<div class="memory-summary-card">
+      <h3>Quick Reference</h3>
+      <div class="memory-summary-grid">
+        <div class="memory-summary-item"><div class="memory-summary-label">Name</div><div class="memory-summary-value">${nameMatch ? escHTML(nameMatch[1].trim()) : 'Matthew'}</div></div>
+        <div class="memory-summary-item"><div class="memory-summary-label">Location</div><div class="memory-summary-value">${locationMatch ? escHTML(locationMatch[1].trim()) : 'NYC'}</div></div>
+        <div class="memory-summary-item"><div class="memory-summary-label">Role</div><div class="memory-summary-value">${roleMatch ? escHTML(roleMatch[1].split('(')[0].trim().slice(0,40)) : '—'}</div></div>
+        <div class="memory-summary-item"><div class="memory-summary-label">Active Projects</div><div class="memory-summary-value">${projectsMatch.length > 0 ? escHTML(projectsMatch.slice(0,3).join(', ')) : '—'}</div></div>
+      </div>
+    </div>`;
+    document.getElementById('overview-content').innerHTML = summaryCard + renderMarkdown(memContent);
   } catch(e) {
     document.getElementById('overview-content').innerHTML = errorBox('Failed to load — check connection', 'loadMemory()');
     document.getElementById('overview-sync-meta').textContent = '';
@@ -1127,6 +1195,49 @@ document.addEventListener('keydown', function(e) {
 function openNewTaskForm() {
   openAddSheet();
 }
+
+
+// ── SWIPE TO DISMISS ──
+(function() {
+  function addSwipeDismiss(sheetId, closeFn) {
+    const sheet = document.getElementById(sheetId);
+    if (!sheet) return;
+    let startY = 0, currentY = 0, dragging = false;
+    sheet.addEventListener('touchstart', function(e) {
+      // Only start swipe if touching near the top handle area or scrolled to top
+      if (sheet.scrollTop > 10) return;
+      startY = e.touches[0].clientY;
+      dragging = true;
+      sheet.style.transition = 'none';
+    }, { passive: true });
+    sheet.addEventListener('touchmove', function(e) {
+      if (!dragging) return;
+      currentY = e.touches[0].clientY;
+      const delta = currentY - startY;
+      if (delta > 0) {
+        sheet.style.transform = `translateY(${delta}px)`;
+      }
+    }, { passive: true });
+    sheet.addEventListener('touchend', function(e) {
+      if (!dragging) return;
+      dragging = false;
+      sheet.style.transition = '';
+      const delta = currentY - startY;
+      if (delta > 80) {
+        sheet.style.transform = '';
+        closeFn();
+      } else {
+        sheet.style.transform = '';
+      }
+    }, { passive: true });
+  }
+  // Attach after DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    addSwipeDismiss('card-sheet', closeCardSheet);
+    addSwipeDismiss('add-sheet', closeAddSheet);
+    addSwipeDismiss('edit-sheet', closeEditSheet);
+  });
+})();
 
 // ── INIT ──
 render();
