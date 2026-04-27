@@ -34,6 +34,8 @@
 
 ## In Progress
 
+- **Hightouch Round 2** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:high -->
+  - prep doc built, nudge ready to send** — Nudge to Reet drafted. Reet silent since Apr 16. $240-320K + equity, Chelsea NYC.
 - **Book doctors appointments** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:medium -->
   - Insurance runs out end of April. Booked physical/bloodwork (Mon Apr 27 10:30am), Dr. Belloir confirmed Apr 28 via Headway. Still need eye exam.
 - **Finish porting Google Photos** <!-- estimate:30m --> <!-- tag:personal --> <!-- ai:low -->
@@ -46,8 +48,6 @@
 
 ## Waiting
 
-- **Hightouch Round 2** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:high -->
-  - prep doc built, nudge ready to send** — Nudge to Reet drafted. Reet silent since Apr 16. $240-320K + equity, Chelsea NYC.
 - **Rogo + Profound PM roles (via Orbis/Thai)** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:medium -->
   - Thai Silvera sent JDs for both. Matthew replied. Waiting on feedback from Thai re: submissions. Series C companies, NYC in-office.
 - **Get Theory pants hemmed** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
