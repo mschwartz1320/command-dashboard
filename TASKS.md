@@ -34,8 +34,6 @@
 
 ## In Progress
 
-- **Millennium Round 2** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
-  - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
 - **Book doctors appointments** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:medium -->
   - Insurance runs out end of April. Booked physical/bloodwork (Mon Apr 27 10:30am), Dr. Belloir confirmed Apr 28 via Headway. Still need eye exam.
 - **Move over Command to OpenClaw** <!-- estimate:1h --> <!-- tag:personal --> <!-- ai:medium -->
@@ -137,6 +135,8 @@
 - ✅ **Set up Obsidian vault on Mac** <!-- tag: --> <!-- ai:low -->
 - ✅ **Call dad to sign in to Amazon account** <!-- estimate:15m --> <!-- tag:personal --> <!-- ai:low -->
   - Order eye stuff for Victoria, razor blades, multi vitamins.
+- ✅ **Millennium Round 2** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
+  - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
 
 ## Won't Do
 
