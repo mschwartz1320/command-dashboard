@@ -28,11 +28,14 @@
 - **Figure out new insurance for after April** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
 - **Set up weekly unemployment claim automation** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
   - Automate via OpenClaw or add recurring reminder to task board each week.
+- **Figure out Capital One car situation** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:low -->
 - **LangChain** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
   - follow up on next steps** — Michael Crooks sent follow-up email Apr 24 ("Please schedule time to speak"). Existing screen was today (Fri). Likely a next-round scheduling request — check email and respond.
 
 ## In Progress
 
+- **Millennium Round 2** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
+  - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
 - **Book doctors appointments** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:medium -->
   - Insurance runs out end of April. Booked physical/bloodwork (Mon Apr 27 10:30am), Dr. Belloir confirmed Apr 28 via Headway. Still need eye exam.
 - **Move over Command to OpenClaw** <!-- estimate:1h --> <!-- tag:personal --> <!-- ai:medium -->
@@ -134,8 +137,6 @@
 - ✅ **Set up Obsidian vault on Mac** <!-- tag: --> <!-- ai:low -->
 - ✅ **Call dad to sign in to Amazon account** <!-- estimate:15m --> <!-- tag:personal --> <!-- ai:low -->
   - Order eye stuff for Victoria, razor blades, multi vitamins.
-- ✅ **Millennium Round 2** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
-  - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
 
 ## Won't Do
 
