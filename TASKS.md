@@ -46,8 +46,6 @@
 
 ## Waiting
 
-- **Figure out Equinox cancellation** <!-- estimate:15m --> <!-- tag:finance --> <!-- ai:medium -->
-  - letter rejected** — Elias Soler replied Apr 20: letter of job loss not accepted. Reply asking for alternative documentation/path or escalate.
 - **Hightouch Round 2** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:high -->
   - prep doc built, nudge ready to send** — Nudge to Reet drafted. Reet silent since Apr 16. $240-320K + equity, Chelsea NYC.
 - **Rogo + Profound PM roles (via Orbis/Thai)** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:medium -->
@@ -137,6 +135,8 @@
   - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
 - ✅ **Move over Command to OpenClaw** <!-- estimate:1h --> <!-- tag:personal --> <!-- ai:medium -->
   - Migrate productivity workspace / Command dashboard to OpenClaw.
+- ✅ **Figure out Equinox cancellation** <!-- estimate:15m --> <!-- tag:finance --> <!-- ai:medium -->
+  - letter rejected** — Elias Soler replied Apr 20: letter of job loss not accepted. Reply asking for alternative documentation/path or escalate.
 
 ## Won't Do
 
