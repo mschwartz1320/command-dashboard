@@ -33,8 +33,6 @@
 
 ## In Progress
 
-- **Justworks Round 3** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:high -->
-  - awaiting outcome** — Interview was Fri Apr 24 11am with Tushar Sharma (Senior Director, Product). Completed. Awaiting feedback.
 - **Millennium Round 2** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
   - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
 - **Book doctors appointments** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:medium -->
@@ -61,6 +59,8 @@
   - Confirmed can take to Flatiron location.
 - **1Password cleanup** <!-- estimate:10m --> <!-- tag:personal --> <!-- ai:low -->
   - Add new credit cards when they arrive. UPS shows 2 Chase packages arriving.
+- **Justworks Round 3** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:high -->
+  - awaiting outcome** — Interview was Fri Apr 24 11am with Tushar Sharma (Senior Director, Product). Completed. Awaiting feedback.
 
 ## Done
 
