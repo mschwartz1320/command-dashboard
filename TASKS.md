@@ -4,8 +4,6 @@
 
 ## Todo
 
-- **🚨 Prep for Gorgias Mon Apr 27 interviews** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
-  - PACKED DAY: 10:30am physical, 11:30am Datadog, 1pm Case Study Review (Lenaïg, Chris, Yegor), 4:15pm Kira SPM, 5pm Leadership Call w/ Maxime Pruvost CEO (updated from 3pm). Research Maxime + interviewers deeply.
 - **Reply to Zinus** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
   - OVERDUE** — 48h close warning sent Apr 23, deadline has passed. Reply immediately with photos of parts B (headrail) and G or ticket may be closed.
 - **Prep for Alpine screening call Tue Apr 28 11:30am** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:medium -->
@@ -49,6 +47,8 @@
 - **🚨 Provide Gorgias references** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
   - ASAP** — Gerard asked for 2 references (1 manager, 1 peer/co-worker): name, email, working relationship. This is the LAST step before offer.
 - **Send Jarret and Ray reference material** <!-- tag:personal --> <!-- ai:medium -->
+- **🚨 Prep for Gorgias Mon Apr 27 interviews** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
+  - PACKED DAY: 10:30am physical, 11:30am Datadog, 1pm Case Study Review (Lenaïg, Chris, Yegor), 4:15pm Kira SPM, 5pm Leadership Call w/ Maxime Pruvost CEO (updated from 3pm). Research Maxime + interviewers deeply.
 
 ## Waiting
 
