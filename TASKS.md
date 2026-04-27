@@ -50,8 +50,6 @@
 
 - **Rogo + Profound PM roles (via Orbis/Thai)** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:medium -->
   - Thai Silvera sent JDs for both. Matthew replied. Waiting on feedback from Thai re: submissions. Series C companies, NYC in-office.
-- **Get Theory pants hemmed** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
-  - Confirmed can take to Flatiron location.
 - **1Password cleanup** <!-- estimate:10m --> <!-- tag:personal --> <!-- ai:low -->
   - Add new credit cards when they arrive. UPS shows 2 Chase packages arriving.
 - **Justworks Round 3** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:high -->
@@ -137,6 +135,8 @@
   - Migrate productivity workspace / Command dashboard to OpenClaw.
 - ✅ **Figure out Equinox cancellation** <!-- estimate:15m --> <!-- tag:finance --> <!-- ai:medium -->
   - letter rejected** — Elias Soler replied Apr 20: letter of job loss not accepted. Reply asking for alternative documentation/path or escalate.
+- ✅ **Get Theory pants hemmed** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
+  - Confirmed can take to Flatiron location.
 
 ## Won't Do
 
