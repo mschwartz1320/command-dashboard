@@ -4,8 +4,6 @@
 
 ## Todo
 
-- **🚨 Reply to Zinus** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
-  - OVERDUE** — 48h close warning sent Apr 23, deadline has passed. Reply immediately with photos of parts B (headrail) and G or ticket may be closed.
 - **LangChain** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
   - schedule next round** — Michael Crooks sent follow-up email Apr 24 ("Please schedule time to speak"). Screen completed Fri Apr 24. Check email and respond to schedule next round.
 - **Decide on Capital One 0% APR expiring May 18** <!-- estimate:20m --> <!-- tag:finance --> <!-- ai:medium -->
@@ -39,6 +37,8 @@
   - awaiting outcome** — Interview was Fri Apr 24 11am with Tushar Sharma (Senior Director, Product). Completed. Awaiting feedback.
 - **Finish porting Google Photos** <!-- estimate:30m --> <!-- tag:personal --> <!-- ai:low -->
   - There is a pinned cowork session.
+- **🚨 Reply to Zinus** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
+  - OVERDUE** — 48h close warning sent Apr 23, deadline has passed. Reply immediately with photos of parts B (headrail) and G or ticket may be closed.
 
 ## Waiting
 
