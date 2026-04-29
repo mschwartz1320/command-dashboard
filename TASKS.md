@@ -37,8 +37,6 @@
 
 ## In Progress
 
-- **🔥 Gorgias** <!-- estimate:0m --> <!-- tag:job --> <!-- ai:high -->
-  - final stage, references submitted, awaiting offer** — Case Study Review done (Apr 27 1pm). Leadership Call with Maxime Pruvost done (Apr 27 5pm). References sent to Gerard Apr 27, Gerard confirmed he's reached out to both. Now waiting on offer.
 - **Kira SPM** <!-- estimate:0m --> <!-- tag:job --> <!-- ai:high -->
   - Round 3 complete, awaiting feedback** — Senior PM interview completed Apr 27 4:15pm (Zoom). Awaiting next steps.
 - **Justworks Round 3** <!-- estimate:0m --> <!-- tag:job --> <!-- ai:high -->
@@ -155,6 +153,8 @@
 - ✅ **Set up Obsidian vault on Mac** <!-- tag: --> <!-- ai:low -->
 - ✅ **🔥 ARInsights PM Phone Screen** <!-- estimate:30m --> <!-- tag:job --> <!-- ai:medium -->
   - TODAY 2:30pm ET** — Kelsey Warren (Higher People), phone call. Happening in ~1hr.
+- ✅ **🔥 Gorgias** <!-- estimate:0m --> <!-- tag:job --> <!-- ai:high -->
+  - final stage, references submitted, awaiting offer** — Case Study Review done (Apr 27 1pm). Leadership Call with Maxime Pruvost done (Apr 27 5pm). References sent to Gerard Apr 27, Gerard confirmed he's reached out to both. Now waiting on offer.
 
 ## Won't Do
 
