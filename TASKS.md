@@ -4,8 +4,6 @@
 
 ## Todo
 
-- **LangChain** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
-  - schedule next round** — Michael Crooks sent follow-up email Apr 24 ("Please schedule time to speak"). Screen completed Fri Apr 24. Check email and respond to schedule next round.
 - **Decide on Capital One 0% APR expiring May 18** <!-- estimate:20m --> <!-- tag:finance --> <!-- ai:medium -->
   - Quicksilver card (ending 7359). Weigh against Roots options $2,181, San Sebastian ~$3K.
 - **Exercise Roots stock options** <!-- estimate:1h --> <!-- tag:roots --> <!-- ai:medium -->
@@ -39,6 +37,8 @@
   - There is a pinned cowork session.
 - **🚨 Reply to Zinus** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
   - OVERDUE** — 48h close warning sent Apr 23, deadline has passed. Reply immediately with photos of parts B (headrail) and G or ticket may be closed.
+- **LangChain** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
+  - schedule next round** — Michael Crooks sent follow-up email Apr 24 ("Please schedule time to speak"). Screen completed Fri Apr 24. Check email and respond to schedule next round.
 
 ## Waiting
 
