@@ -39,8 +39,6 @@
 
 - **Justworks Round 3** <!-- estimate:0m --> <!-- tag:job --> <!-- ai:high -->
   - awaiting outcome** — Interview was Fri Apr 24 11am with Tushar Sharma (Senior Director, Product). Completed. Awaiting feedback.
-- **Move over Command to OpenClaw** <!-- estimate:1h --> <!-- tag:personal --> <!-- ai:medium -->
-  - Migrate productivity workspace / Command dashboard to OpenClaw.
 - **Finish porting Google Photos** <!-- estimate:30m --> <!-- tag:personal --> <!-- ai:low -->
   - There is a pinned cowork session.
 
@@ -155,6 +153,8 @@
   - Round 3 complete, awaiting feedback** — Senior PM interview completed Apr 27 4:15pm (Zoom). Awaiting next steps.
 - ✅ **Millennium Round 2** <!-- estimate:2h --> <!-- tag:job --> <!-- ai:high -->
   - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
+- ✅ **Move over Command to OpenClaw** <!-- estimate:1h --> <!-- tag:personal --> <!-- ai:medium -->
+  - Migrate productivity workspace / Command dashboard to OpenClaw.
 
 ## Won't Do
 
