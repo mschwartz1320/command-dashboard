@@ -4,8 +4,6 @@
 
 ## Todo
 
-- **🚨 Spend FSA balance** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
-  - DUE Apr 30** — $660 remaining. 2 days left. Buy frames at local store, get lenses at Costco.
 - **🚨 Reply to Zinus** <!-- estimate:20m --> <!-- tag:personal --> <!-- ai:low -->
   - OVERDUE** — 48h close warning sent Apr 23, deadline has passed. Reply immediately with photos of parts B (headrail) and G or ticket may be closed.
 - **LangChain** <!-- estimate:15m --> <!-- tag:job --> <!-- ai:low -->
@@ -155,6 +153,8 @@
   - take-home submitted, awaiting panel** — Take-home deck submitted Apr 22 (pptx+pdf to Kaitlin). Waiting for feedback + panel of 4 + call with Brian's boss. Research Glean. $175-250K + bonus.
 - ✅ **Move over Command to OpenClaw** <!-- estimate:1h --> <!-- tag:personal --> <!-- ai:medium -->
   - Migrate productivity workspace / Command dashboard to OpenClaw.
+- ✅ **🚨 Spend FSA balance** <!-- estimate:30m --> <!-- tag:finance --> <!-- ai:medium -->
+  - DUE Apr 30** — $660 remaining. 2 days left. Buy frames at local store, get lenses at Costco.
 
 ## Won't Do
 
